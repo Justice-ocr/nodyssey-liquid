@@ -1,0 +1,15 @@
+{
+  "schema": 1,
+  "channel": "stable",
+  "versionName": "1.3.10",
+  "tag": "liquid-v1.3.10.1",
+  "notes": "Independent Nodyssey Liquid build: bidirectional liquid theme reveal, opt-in synchronized local audio, persisted settings and reduced-motion fallback. Package io.github.nodyssey.liquid; independent signature. Base app version remains upstream 1.3.10 (148). No physical Android device validation yet.",
+  "publishedOn": "2026-11-11",
+  "apk": {
+    "name": "nodyssey-v1.3.10-liquid.1.apk",
+    "url": "https://github.com/Justice-ocr/nodyssey-liquid/releases/download/liquid-v1.3.10.1/nodyssey-v1.3.10-liquid.1.apk",
+    "sizeBytes": 12172414,
+    "sha256": "13163e35db9ac7757b644eaae214257843117e5709bc2f7967da8586290897e6"
+  },
+  "releaseUrl": "https://github.com/Justice-ocr/nodyssey-liquid/releases/tag/liquid-v1.3.10.1"
+}
