@@ -25,6 +25,8 @@ val hasReleaseSigning =
 // Opt-in personal distribution: retain the test app's ID so a release APK can replace it in place.
 // The build type remains release, so debug-only tools such as LeakCanary are not packaged.
 val echRelease = providers.gradleProperty("nodyssey.echRelease").orNull == "true"
+// Explicitly separate distribution: the upstream certificate is not available to a fork.
+val liquidRelease = providers.gradleProperty("nodyssey.liquidRelease").orNull == "true"
 
 // Local JVM tests need the desktop JNI binary, not the Android AAR's copy of the same classes.
 configurations.matching { it.name.endsWith("UnitTestRuntimeClasspath") }.configureEach {
@@ -68,7 +70,10 @@ android {
             // `plaza.android.application` because the config it names is declared just above, which
             // is after the convention plugin has already run.
             signingConfig = signingConfigs.findByName("release")
-            if (echRelease) {
+            if (liquidRelease) {
+                applicationIdSuffix = ".liquid"
+                isDebuggable = false
+            } else if (echRelease) {
                 applicationIdSuffix = ".debug"
                 isDebuggable = false
             }

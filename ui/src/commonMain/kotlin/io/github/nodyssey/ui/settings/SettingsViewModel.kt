@@ -148,6 +148,18 @@ class SettingsViewModel(
         viewModelScope.launch { settings.setThemeMode(value) }
     }
 
+    fun setLiquidThemeEnabled(value: Boolean) {
+        viewModelScope.launch { settings.setLiquidThemeEnabled(value) }
+    }
+
+    fun setLiquidSoundEnabled(value: Boolean) {
+        viewModelScope.launch { settings.setLiquidSoundEnabled(value) }
+    }
+
+    fun setLiquidSoundVolume(value: Float) {
+        viewModelScope.launch { settings.setLiquidSoundVolume(value) }
+    }
+
     /** 已读标记 — what a list does with a thread that has already been opened. */
     fun setReadMarkStyle(value: ReadMarkStyle) {
         viewModelScope.launch { settings.setReadMarkStyle(value) }

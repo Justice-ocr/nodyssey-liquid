@@ -44,6 +44,7 @@ import io.github.nodyssey.ui.settings.theme.activePreset
 import io.github.nodyssey.ui.settings.theme.rememberActiveSeed
 import io.github.nodyssey.ui.settings.theme.toPlaza
 import io.github.nodyssey.ui.sticker.LocalStickerLibrary
+import io.github.nodyssey.ui.theme.liquid.LiquidThemeReveal
 import io.github.plaza.designsys.component.LocalLinkPrefetcher
 import io.github.plaza.designsys.component.PlazaSpinner
 import io.github.plaza.designsys.richtext.DismissTextSelectionOnTap
@@ -201,85 +202,93 @@ internal fun NodysseyChrome(
     // and flash the device's language on every cold start — the same reason `ApplyAppLanguage`
     // above takes the nullable.
     ProvideAppLanguage(storedSettings?.appLanguage) {
-        PlazaTheme(
+        LiquidThemeReveal(
             darkTheme = darkTheme,
-            // The three sources differ only in where the seed came from; 动态取色 is the one that can
-            // also skip the generator and take the OS's palette whole.
-            seedColor = Color(rememberActiveSeed(settings)),
-            paletteStyle = settings.paletteStyle.toPlaza(),
-            // 角色预设 is the one answer that is not a seed at all: five whole schemes written by hand,
-            // which is why they win over both of the lines above.
-            characterPalette = activeCharacterPalette(settings),
-            softPalette = activePreset(settings)?.softPalette,
-            pureWhite = activePreset(settings)?.pureWhite == true,
-            useSystemPalette =
-            settings.colorSource == ColorSource.WALLPAPER && settings.wallpaperSystemPalette,
-            fontScale = settings.fontScale,
-            // 单手模式 reaches the twenty-odd screens that carry a `OneHandTopAppBar` through a
-            // composition local, so none of them has to be told about the setting.
-            oneHandMode = settings.oneHandMode,
-            // Two questions with one answer. The OS's remove-animations setting is not an in-app
-            // one — whoever asked the system for no motion asked every app — and 墨水屏模式 is not an
-            // accessibility setting, but on electronic paper every frame is a physical refresh, so
-            // both want the same snapped motion scheme.
+            enabled = settings.liquidThemeEnabled && !settings.einkMode,
             reducedMotion = rememberReducedMotionEnabled() || settings.einkMode,
-            einkMode = settings.einkMode,
-        ) {
-            // Inside the theme on purpose: the system bar icons follow the answer PlazaTheme was just
-            // given, not the OS's night mode — the same rule the Custom Tab colours already follow.
-            SystemBarsMatchTheme(darkTheme)
-            // Every link that leaves the app goes through LocalUriHandler — the explicit `openUri` calls
-            // in Navigation and the ones Compose resolves for a link inside post text alike. Overriding
-            // it here, inside the theme so the tab can match the colours on screen, is what makes
-            // 外部链接打开方式 apply everywhere at once. 测评报告 and 表情大小 ride along for the same
-            // reason: both are decided per post body, a post body turns up on six screens, and only this
-            // one place has to read the setting.
-            val stickerSizing =
-                remember(settings.stickerUniformSize, settings.stickerSize) {
-                    StickerSizing(
-                        uniform = settings.stickerUniformSize,
-                        uniformSize = settings.stickerSize.sp,
-                    )
-                }
-            // The handler and the prefetcher are one object because on Android they are one connection
-            // to the browser: what gets warmed on press is what the tab is then launched through.
-            val browserLinks = rememberBrowserLinks()
-            // 测评对比's basket rides here for the reason 测评报告 does: a report turns up wherever a
-            // post body does, and the card is what adds to it.
-            val reportCompareBasket = rememberReportCompareBasket(container.reportCompareStore)
-            CompositionLocalProvider(
-                LocalUriHandler provides browserLinks.uriHandler,
-                LocalLinkPrefetcher provides browserLinks.prefetcher,
-                LocalReportFormat provides settings.reportFormat,
-                LocalReportCompareBasket provides reportCompareBasket,
-                LocalStickerSizing provides stickerSizing,
-                // 已读标记 rides here for the same reason 表情大小 does: three list surfaces paint a
-                // card and none of them owns the setting, so the answer has to arrive from above or
-                // it would drift between the feed and the search results. Null colour = the theme's.
-                LocalReadMarkPaint provides ReadMarkPaint(
-                    style = settings.readMarkStyle,
-                    color = settings.readMarkColor?.let { Color(it) },
-                ),
-                // 我的表情 rides here for the reason the basket does: three editors draw the panel and
-                // every post body's long press can add to it. See `LocalStickerLibrary`.
-                LocalStickerLibrary provides container.stickerLibrary,
-                // The editors' 图床 key, for the same reason: three screens, no ViewModel of theirs.
-                LocalImageHostRepository provides container.imageHostRepository,
-                // The one thing on this list that is not a setting: it is what the platform says this
-                // build is called, so that a debug build's screens say "Nodyssey·D" like its launcher
-                // icon does. See `LocalAppName`.
-                LocalAppName provides container.appVersion.label,
+            soundEnabled = settings.liquidSoundEnabled,
+            volume = settings.liquidSoundVolume,
+        ) { revealedDarkTheme ->
+            PlazaTheme(
+                darkTheme = revealedDarkTheme,
+                // The three sources differ only in where the seed came from; 动态取色 is the one that can
+                // also skip the generator and take the OS's palette whole.
+                seedColor = Color(rememberActiveSeed(settings)),
+                paletteStyle = settings.paletteStyle.toPlaza(),
+                // 角色预设 is the one answer that is not a seed at all: five whole schemes written by hand,
+                // which is why they win over both of the lines above.
+                characterPalette = activeCharacterPalette(settings),
+                softPalette = activePreset(settings)?.softPalette,
+                pureWhite = activePreset(settings)?.pureWhite == true,
+                useSystemPalette =
+                settings.colorSource == ColorSource.WALLPAPER && settings.wallpaperSystemPalette,
+                fontScale = settings.fontScale,
+                // 单手模式 reaches the twenty-odd screens that carry a `OneHandTopAppBar` through a
+                // composition local, so none of them has to be told about the setting.
+                oneHandMode = settings.oneHandMode,
+                // Two questions with one answer. The OS's remove-animations setting is not an in-app
+                // one — whoever asked the system for no motion asked every app — and 墨水屏模式 is not an
+                // accessibility setting, but on electronic paper every frame is a physical refresh, so
+                // both want the same snapped motion scheme.
+                reducedMotion = rememberReducedMotionEnabled() || settings.einkMode,
+                einkMode = settings.einkMode,
             ) {
-                // 备注 rides here for the reason 测评报告 does: a name is drawn on five screens.
-                ProvideUserNotes(container.userNoteStore) {
-                    Surface(
-                        modifier = modifier.fillMaxSize(),
-                        color = MaterialTheme.colorScheme.background,
-                    ) {
-                        // A post body turns up on six screens, and a selection in any of them should go
-                        // when the reader taps somewhere else — not only somewhere inside that body.
-                        DismissTextSelectionOnTap {
-                            content(storedSettings)
+                // Inside the theme on purpose: the system bar icons follow the answer PlazaTheme was just
+                // given, not the OS's night mode — the same rule the Custom Tab colours already follow.
+                SystemBarsMatchTheme(darkTheme)
+                // Every link that leaves the app goes through LocalUriHandler — the explicit `openUri` calls
+                // in Navigation and the ones Compose resolves for a link inside post text alike. Overriding
+                // it here, inside the theme so the tab can match the colours on screen, is what makes
+                // 外部链接打开方式 apply everywhere at once. 测评报告 and 表情大小 ride along for the same
+                // reason: both are decided per post body, a post body turns up on six screens, and only this
+                // one place has to read the setting.
+                val stickerSizing =
+                    remember(settings.stickerUniformSize, settings.stickerSize) {
+                        StickerSizing(
+                            uniform = settings.stickerUniformSize,
+                            uniformSize = settings.stickerSize.sp,
+                        )
+                    }
+                // The handler and the prefetcher are one object because on Android they are one connection
+                // to the browser: what gets warmed on press is what the tab is then launched through.
+                val browserLinks = rememberBrowserLinks()
+                // 测评对比's basket rides here for the reason 测评报告 does: a report turns up wherever a
+                // post body does, and the card is what adds to it.
+                val reportCompareBasket = rememberReportCompareBasket(container.reportCompareStore)
+                CompositionLocalProvider(
+                    LocalUriHandler provides browserLinks.uriHandler,
+                    LocalLinkPrefetcher provides browserLinks.prefetcher,
+                    LocalReportFormat provides settings.reportFormat,
+                    LocalReportCompareBasket provides reportCompareBasket,
+                    LocalStickerSizing provides stickerSizing,
+                    // 已读标记 rides here for the same reason 表情大小 does: three list surfaces paint a
+                    // card and none of them owns the setting, so the answer has to arrive from above or
+                    // it would drift between the feed and the search results. Null colour = the theme's.
+                    LocalReadMarkPaint provides ReadMarkPaint(
+                        style = settings.readMarkStyle,
+                        color = settings.readMarkColor?.let { Color(it) },
+                    ),
+                    // 我的表情 rides here for the reason the basket does: three editors draw the panel and
+                    // every post body's long press can add to it. See `LocalStickerLibrary`.
+                    LocalStickerLibrary provides container.stickerLibrary,
+                    // The editors' 图床 key, for the same reason: three screens, no ViewModel of theirs.
+                    LocalImageHostRepository provides container.imageHostRepository,
+                    // The one thing on this list that is not a setting: it is what the platform says this
+                    // build is called, so that a debug build's screens say "Nodyssey·D" like its launcher
+                    // icon does. See `LocalAppName`.
+                    LocalAppName provides container.appVersion.label,
+                ) {
+                    // 备注 rides here for the reason 测评报告 does: a name is drawn on five screens.
+                    ProvideUserNotes(container.userNoteStore) {
+                        Surface(
+                            modifier = modifier.fillMaxSize(),
+                            color = MaterialTheme.colorScheme.background,
+                        ) {
+                            // A post body turns up on six screens, and a selection in any of them should go
+                            // when the reader taps somewhere else — not only somewhere inside that body.
+                            DismissTextSelectionOnTap {
+                                content(storedSettings)
+                            }
                         }
                     }
                 }

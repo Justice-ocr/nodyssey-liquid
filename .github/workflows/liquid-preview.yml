@@ -1,0 +1,38 @@
+name: Liquid preview
+on:
+  push:
+    branches: [feature/liquid-theme-reveal]
+    paths: ['liquid-preview/**', '.github/workflows/liquid-preview.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+concurrency:
+  group: liquid-pages
+  cancel-in-progress: true
+jobs:
+  preview:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v6
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: liquid-preview/package-lock.json
+      - run: npm ci
+        working-directory: liquid-preview
+      - run: npm run test && npm run build
+        working-directory: liquid-preview
+      - run: npx playwright install --with-deps chromium && npm run test:e2e
+        working-directory: liquid-preview
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v4
+        with:
+          path: liquid-preview/dist
+      - uses: actions/deploy-pages@v4
+        id: deployment

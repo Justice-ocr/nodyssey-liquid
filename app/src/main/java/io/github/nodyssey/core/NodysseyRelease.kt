@@ -8,7 +8,7 @@ package io.github.nodyssey.core
  * publishes somewhere else entirely. This fork publishes its signed Android builds on its own releases page.
  */
 object NodysseyRelease {
-    const val REPOSITORY = "weishiair/nodyssey"
+    const val REPOSITORY = "Justice-ocr/nodyssey-liquid"
 
     /**
      * What this app's APK is called on a release, so the update check downloads that file and not
@@ -44,5 +44,5 @@ object NodysseyRelease {
      *
      * `.github/workflows/ech-updates.yml` writes the three files; `UpdateManifestSource` reads them.
      */
-    const val UPDATES_BASE_URL = "https://weishiair.github.io/nodyssey/"
+    const val UPDATES_BASE_URL = "https://justice-ocr.github.io/nodyssey-liquid/"
 }

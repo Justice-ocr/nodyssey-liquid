@@ -1,0 +1,8 @@
+<resources>
+    <string name="liquid_animation">Liquid theme reveal</string>
+    <string name="liquid_animation_hint">Pour from the theme button to reveal the next theme; switches directly with reduced motion</string>
+    <string name="liquid_sound">Liquid sounds</string>
+    <string name="liquid_sound_hint">Soft, locally synthesized water sounds; off by default</string>
+    <string name="liquid_volume">Sound volume · %1$d%%</string>
+    <string name="liquid_listen">Listen</string>
+</resources>

@@ -1,0 +1,8 @@
+<resources>
+    <string name="liquid_animation">液體主題切換</string>
+    <string name="liquid_animation_hint">從明暗按鈕流出，逐步揭示另一主題；減少動態效果時直接切換</string>
+    <string name="liquid_sound">液體音效</string>
+    <string name="liquid_sound_hint">本機合成的輕柔滴水與流水聲，預設關閉</string>
+    <string name="liquid_volume">音效音量 · %1$d%%</string>
+    <string name="liquid_listen">試聽</string>
+</resources>

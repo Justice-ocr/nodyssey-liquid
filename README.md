@@ -2,6 +2,8 @@
 
 # Nodyssey
 
+> **Liquid Theme Reveal fork**: [Implementation and Android build](docs/liquid-theme-reveal.md) · [Interactive preview](https://justice-ocr.github.io/nodyssey-liquid/) · [Validation](docs/liquid-validation.md). Independent Android package: `io.github.nodyssey.liquid`; not signed by the upstream author.
+
 **一个为 NodeSeek 而生的开源客户端**
 
 舒适地阅读、交流与探索。在支持的网络环境下，借助内置 DoH 与 ECH，**不配置代理也能尝试直连 NodeSeek**。

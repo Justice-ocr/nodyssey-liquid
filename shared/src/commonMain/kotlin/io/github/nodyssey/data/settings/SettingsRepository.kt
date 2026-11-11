@@ -76,6 +76,9 @@ class SettingsRepository(
                 themeMode = preferences[KEY_THEME_MODE]
                     ?.let { runCatching { ThemeMode.valueOf(it) }.getOrNull() }
                     ?: ThemeMode.SYSTEM,
+                liquidThemeEnabled = preferences[KEY_LIQUID_THEME] ?: true,
+                liquidSoundEnabled = preferences[KEY_LIQUID_SOUND] ?: false,
+                liquidSoundVolume = (preferences[KEY_LIQUID_VOLUME] ?: 0.25f).let { if (it.isFinite()) it.coerceIn(0f, 1f) else 0.25f },
                 appLanguage = AppLanguage.ofName(preferences[KEY_APP_LANGUAGE]),
                 colorSource = preferences[KEY_COLOR_SOURCE]
                     ?.let(::decodeColorSource)
@@ -179,6 +182,14 @@ class SettingsRepository(
     }
 
     suspend fun setThemeMode(mode: ThemeMode) = edit { it[KEY_THEME_MODE] = mode.name }
+
+    suspend fun setLiquidThemeEnabled(enabled: Boolean) = edit { it[KEY_LIQUID_THEME] = enabled }
+
+    suspend fun setLiquidSoundEnabled(enabled: Boolean) = edit { it[KEY_LIQUID_SOUND] = enabled }
+
+    suspend fun setLiquidSoundVolume(volume: Float) = edit {
+        it[KEY_LIQUID_VOLUME] = if (volume.isFinite()) volume.coerceIn(0f, 1f) else 0.25f
+    }
 
     /**
      * 语言. Stored, and nothing more: applying it is the platform's half — see `ApplyAppLanguage` in
@@ -683,6 +694,9 @@ class SettingsRepository(
         const val DEFAULT_READ_HISTORY_LIMIT = 300
 
         private val KEY_THEME_MODE = stringPreferencesKey("theme_mode")
+        private val KEY_LIQUID_THEME = booleanPreferencesKey("liquid_theme_enabled")
+        private val KEY_LIQUID_SOUND = booleanPreferencesKey("liquid_sound_enabled")
+        private val KEY_LIQUID_VOLUME = floatPreferencesKey("liquid_sound_volume")
         private val KEY_APP_LANGUAGE = stringPreferencesKey("app_language")
 
         /** Read only to migrate a store written before 配色来源 existed; nothing writes it now. */
@@ -873,6 +887,9 @@ enum class ComposerSurface { POST, REPLY, MESSAGE }
 
 data class UserSettings(
     val themeMode: ThemeMode = ThemeMode.SYSTEM,
+    val liquidThemeEnabled: Boolean = true,
+    val liquidSoundEnabled: Boolean = false,
+    val liquidSoundVolume: Float = 0.25f,
     /**
      * 语言 — which translation the interface is drawn in, or [AppLanguage.SYSTEM] for the device's
      * own.
