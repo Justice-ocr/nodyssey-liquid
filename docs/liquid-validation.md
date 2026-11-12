@@ -2,6 +2,18 @@
 
 基于 `weishiair/nodyssey@29e60a79`，在 Windows / JDK 21 / Android SDK 37 / Chrome 上执行。结果按平台区分。
 
+## Liquid 2 增量验证（2026-11-12）
+
+- 首页、帖子详情、通知、个人页、设置页顶栏接入 `ThemeToggleButton`；复用既有液体揭示和设置仓库。
+- `:ui:compileKotlinJvm`、Android 编译、`spotlessCheck`、优化签名 `:app:assembleRelease -Pnodyssey.liquidRelease=true`（含 vital lint）通过。
+- 宿主针对性测试 **8 项，0 失败**：原有 7 项 + 新的顶栏双向切换测试，验证以当前应用明暗而非系统明暗决定方向，两次提交的值为 false / true，草稿不重建。另运行首页行为 23 项、架构导入边界 1 项、硬编码语言检查 1 项，合计 **33 项，0 失败**。
+- 运行现有 `PostListScreenRenderTest` 的 light/dark 两项，检查 360dp 宽原生首页截图（[浅色](liquid-screenshots/android-home-light.png)、[深色](liquid-screenshots/android-home-dark.png)），按钮位于账号左侧，保留原有站点入口和下一行搜索栏。渲染 fixture 没有注入设置写入回调，因此图中按钮呈禁用色，仅用于布局检查，不代表真机操作验证。
+- 新 APK：`nodyssey-v1.3.10.2.apk`，内部版本 `1.3.10.2 (149)`，包名和证书同 Liquid 1，可升级安装；非 debuggable、两种 ARM ABI。
+- 大小：12,172,538 bytes；APK SHA-256：`aec0c1ce0b3c22161d1a8e9c26ade40ec5a19cbe24e0198ee074f60cae89daa7`；v2/v3 签名校验成功。
+- 仍未连接 Android 真机或模拟器，不宣称已完成实机音质/视觉/性能验收。
+
+以下是第一版完整验证与已知范围。
+
 ## 已通过
 
 ### Android / Kotlin

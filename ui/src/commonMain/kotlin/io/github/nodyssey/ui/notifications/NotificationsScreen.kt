@@ -94,6 +94,7 @@ import io.github.nodyssey.ui.resources.notifications_messages
 import io.github.nodyssey.ui.resources.notifications_one_hand_tip
 import io.github.nodyssey.ui.resources.notifications_one_hand_tip_settings
 import io.github.nodyssey.ui.resources.tab_notifications
+import io.github.nodyssey.ui.theme.liquid.ThemeToggleButton
 import io.github.plaza.core.TimeFormat
 import io.github.plaza.designsys.component.GroupedListItem
 import io.github.plaza.designsys.component.LayerPageGutter
@@ -330,6 +331,7 @@ fun NotificationsScreen(
                         null
                     },
                     actions = {
+                        ThemeToggleButton()
                         TextButton(onClick = onMarkAllRead, enabled = state.hasUnread) {
                             Icon(
                                 PlazaIcons.DoneAll,

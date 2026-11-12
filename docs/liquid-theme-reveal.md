@@ -2,7 +2,7 @@
 
 本改动基于 `weishiair/nodyssey` 的 `29e60a79`，保留 Kotlin Multiplatform / Compose、原有导航、设置仓库和业务状态。**并未把 Android 项目重写成网页。**
 
-- Android：`设置 → 明暗` 的原有按钮启动液体动画；下方新增动画、音效、音量与短试听。音效默认关闭。
+- Android：首页账号左侧新增太阳/月亮按钮，帖子详情、通知、个人页、设置页顶栏也可一键切换。点击从该按钮底缘启动同一液体动画；沿用设置仓库记住深浅偏好，墨水屏模式下禁用。`设置 → 明暗` 原有分段按钮继续保留，下方为动画、音效、音量与短试听。音效默认关闭。
 - 网页预览：[`liquid-preview/`](../liquid-preview/README.md)，React + TypeScript + Vite + CSS + 动态 SVG + Web Audio，独立演示，不连接论坛 API。在线入口：https://justice-ocr.github.io/nodyssey-liquid/ 。
 - 短试听：[进入深色](../liquid-preview/public/audio/into-dark.wav)、[进入浅色](../liquid-preview/public/audio/into-light.wav)，默认不自动播放。
 - 独立发行包：经用户确认，`io.github.nodyssey.liquid` / **Nodyssey Liquid**；不覆盖原作者版本、不共享其签名、不自动迁移其登录态。
@@ -29,7 +29,7 @@
 
 没有签名环境时，Release 产物是 **unsigned**，不能把它当作可安装交付。不要使用原分支的 `-Pnodyssey.echRelease=true` 冒充可覆盖原版的版本。当前 Fork 的更新源已经转为本 Fork，避免安装到签名不同的原作者构建。
 
-当前独立发行文件名为 `nodyssey-v1.3.10-liquid.1.apk`；Android 内部版本仍是上游 `1.3.10 (148)`，`liquid.1` 是本 Fork 的发行序号。`liquid-preview/public/{stable,dev,changelog}.json` 与预览一起由 Pages workflow 部署，且只指向本 Fork APK。后续发行须一起更新这三个文件的版本、大小和 SHA-256，不能直接提供上游不同签名的构建。
+当前独立发行文件名为 `nodyssey-v1.3.10.2.apk`，内部版本 `1.3.10.2 (149)`；第四段为 Liquid 独立修订号，高于第一版的 `1.3.10 (148)`，可以原位升级。`liquid-preview/public/{stable,dev,changelog}.json` 与预览一起由 Pages workflow 部署，且只指向本 Fork APK。后续发行须一起更新这三个文件的版本、大小和 SHA-256，不能直接提供上游不同签名的构建。
 
 ## 原生实现
 
@@ -37,6 +37,7 @@
 
 - `LiquidThemeReveal`：受控 `darkTheme`，可配置时长、启用/减弱动效、音效适配器及音量。
 - `LiquidRevealController.request(target, sourceInRoot, onThemeChange)`：起点取实际按钮底缘；目标主题完成或中断时仅提交一次。重复请求不排队。
+- `ThemeToggleButton`：可放入任意原生顶栏 action slot；读取 `LocalPlazaDarkTheme` 的实际明暗（含跟随系统的结果），通过根部提供的 `LocalQuickThemeChange` 写入 `ThemeMode.DARK/LIGHT`，无须每个页面再注入设置 ViewModel。按钮含三语言无障碍名称和长按提示，动画期间禁用。
 - `LiquidGeometry`：复用单一非零绕组 `Path`，液柱/液滴/水花/波面同向子轮廓，重叠区域是联合而不是挖洞。
 - `LiquidFrame`：同一真实帧进度驱动绘制、落水和流水阶段，没有定时器堆叠音效。
 - `LiquidAudio`：可自行实现；Android 使用 `AudioTrack` 播放本地生成 PCM；设备异常被隔离，不阻断切换。没有现成音效系统需要复用。

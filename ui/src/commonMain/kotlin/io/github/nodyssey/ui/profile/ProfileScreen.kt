@@ -144,6 +144,7 @@ import io.github.nodyssey.ui.resources.profile_tile_theme
 import io.github.nodyssey.ui.resources.profile_tile_topics
 import io.github.nodyssey.ui.resources.profile_tools
 import io.github.nodyssey.ui.resources.settings_title
+import io.github.nodyssey.ui.theme.liquid.ThemeToggleButton
 import io.github.plaza.designsys.component.LayerCard
 import io.github.plaza.designsys.component.LayerCardGap
 import io.github.plaza.designsys.component.LayerPageGutter
@@ -304,7 +305,10 @@ fun ProfileScreen(
                     TopAppBar(
                         windowInsets = barInsets,
                         title = {},
-                        actions = { SettingsAction(hasAppUpdate = hasAppUpdate, onClick = destinations.settings) },
+                        actions = {
+                            ThemeToggleButton()
+                            SettingsAction(hasAppUpdate = hasAppUpdate, onClick = destinations.settings)
+                        },
                         colors =
                         TopAppBarDefaults.topAppBarColors(
                             containerColor = MaterialTheme.colorScheme.background,

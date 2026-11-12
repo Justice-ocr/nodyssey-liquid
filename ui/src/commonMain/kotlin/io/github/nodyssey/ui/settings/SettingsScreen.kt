@@ -164,6 +164,7 @@ import io.github.nodyssey.ui.settings.theme.themeSummary
 import io.github.nodyssey.ui.sticker.LocalStickerLibrary
 import io.github.nodyssey.ui.theme.liquid.LiquidThemeOptions
 import io.github.nodyssey.ui.theme.liquid.LocalLiquidReveal
+import io.github.nodyssey.ui.theme.liquid.ThemeToggleButton
 import io.github.plaza.core.richtext.InlineNode
 import io.github.plaza.core.richtext.RichNode
 import io.github.plaza.designsys.component.ChoiceSegments
@@ -328,6 +329,7 @@ fun SettingsScreen(
             OneHandTopAppBar(
                 title = stringResource(Res.string.settings_title),
                 state = appBarState,
+                actions = { ThemeToggleButton() },
                 navigationIcon = {
                     IconButton(onClick = onBack) {
                         Icon(

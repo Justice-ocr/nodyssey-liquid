@@ -5,4 +5,6 @@
     <string name="liquid_sound_hint">Soft, locally synthesized water sounds; off by default</string>
     <string name="liquid_volume">Sound volume · %1$d%%</string>
     <string name="liquid_listen">Listen</string>
+    <string name="liquid_switch_dark">Switch to dark mode</string>
+    <string name="liquid_switch_light">Switch to light mode</string>
 </resources>

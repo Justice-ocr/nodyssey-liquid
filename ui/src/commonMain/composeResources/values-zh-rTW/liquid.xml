@@ -5,4 +5,6 @@
     <string name="liquid_sound_hint">本機合成的輕柔滴水與流水聲，預設關閉</string>
     <string name="liquid_volume">音效音量 · %1$d%%</string>
     <string name="liquid_listen">試聽</string>
+    <string name="liquid_switch_dark">切換到深色模式</string>
+    <string name="liquid_switch_light">切換到淺色模式</string>
 </resources>

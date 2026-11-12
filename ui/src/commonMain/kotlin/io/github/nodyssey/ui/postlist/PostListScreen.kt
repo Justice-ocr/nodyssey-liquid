@@ -141,6 +141,7 @@ import io.github.nodyssey.ui.resources.site_switch_signed_in_as
 import io.github.nodyssey.ui.resources.tab_profile
 import io.github.nodyssey.ui.settings.rememberSiteSwitch
 import io.github.nodyssey.ui.settings.siteSwitchRestartsApp
+import io.github.nodyssey.ui.theme.liquid.ThemeToggleButton
 import io.github.plaza.core.TimeFormat
 import io.github.plaza.designsys.component.AppendSpinner
 import io.github.plaza.designsys.component.AvatarShape
@@ -942,6 +943,7 @@ private fun HomeHeader(
             verticalAlignment = Alignment.CenterVertically,
         ) {
             SiteSwitcher(account = account, modifier = Modifier.weight(1f))
+            ThemeToggleButton()
             AccountButton(account = account, onClick = onAccountClick)
         }
         Row(

@@ -45,6 +45,7 @@ import io.github.nodyssey.ui.settings.theme.rememberActiveSeed
 import io.github.nodyssey.ui.settings.theme.toPlaza
 import io.github.nodyssey.ui.sticker.LocalStickerLibrary
 import io.github.nodyssey.ui.theme.liquid.LiquidThemeReveal
+import io.github.nodyssey.ui.theme.liquid.LocalQuickThemeChange
 import io.github.plaza.designsys.component.LocalLinkPrefetcher
 import io.github.plaza.designsys.component.PlazaSpinner
 import io.github.plaza.designsys.richtext.DismissTextSelectionOnTap
@@ -162,6 +163,16 @@ internal fun NodysseyChrome(
     val storedSettings: UserSettings? by container.settingsRepository.settings
         .collectAsStateWithLifecycle(initialValue = initialSettings)
     val settings = storedSettings ?: UserSettings()
+    val themeScope = rememberCoroutineScope()
+    val quickThemeChange: ((Boolean) -> Unit)? = if (settings.einkMode) {
+        null
+    } else {
+        { target ->
+            themeScope.launch {
+                container.settingsRepository.setThemeMode(if (target) ThemeMode.DARK else ThemeMode.LIGHT)
+            }
+        }
+    }
 
     ApplyDisplayRefreshRate(if (settings.einkMode) 0 else settings.displayRefreshRate)
 
@@ -256,6 +267,7 @@ internal fun NodysseyChrome(
                 // post body does, and the card is what adds to it.
                 val reportCompareBasket = rememberReportCompareBasket(container.reportCompareStore)
                 CompositionLocalProvider(
+                    LocalQuickThemeChange provides quickThemeChange,
                     LocalUriHandler provides browserLinks.uriHandler,
                     LocalLinkPrefetcher provides browserLinks.prefetcher,
                     LocalReportFormat provides settings.reportFormat,

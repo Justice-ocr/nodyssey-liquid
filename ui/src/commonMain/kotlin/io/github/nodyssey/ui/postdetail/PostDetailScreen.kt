@@ -212,6 +212,7 @@ import io.github.nodyssey.ui.sticker.ImageActionsFrom
 import io.github.nodyssey.ui.sticker.ImageActionsSheet
 import io.github.nodyssey.ui.sticker.LocalImageActions
 import io.github.nodyssey.ui.sticker.rememberImageActionsState
+import io.github.nodyssey.ui.theme.liquid.ThemeToggleButton
 import io.github.plaza.core.TimeFormat
 import io.github.plaza.core.richtext.InlineNode
 import io.github.plaza.core.richtext.RichNode
@@ -1112,6 +1113,7 @@ private fun DetailTopBar(
                 }
             },
             actions = {
+                ThemeToggleButton()
                 IconButton(onClick = onOpenInBrowser) {
                     Icon(
                         PlazaIcons.OpenInNew,
