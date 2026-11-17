@@ -35,5 +35,5 @@
 - `:app:assembleDebug`、`:app:bundleRelease`、独立签名 `:app:assembleRelease -Pnodyssey.liquidRelease=true` 通过，Release `lintVital` 通过。Gradle 全任务客户端在上游测试任务返回失败后断开，完整 aggregate 命令非零；以上独立任务结果分别记录。
 - 新 APK：`nodyssey-v1.3.11.1.apk`，code 166，size 12,236,230 bytes；SHA-256 `ab2aea65291c055576dbf0bb130a8ae26c150014e5f09df6075fa433c351261a`。包名 `io.github.nodyssey.liquid`，同 Liquid 2 的 RSA 3072 证书；APK v2/v3 验签通过，ABI `arm64-v8a` / `armeabi-v7a`。
 - 资源名称重复检查通过，Room schemas 没有生成差异。
-- `Stale PRs` 定时工作流已在 GitHub 禁用；Liquid preview 改为仅手动触发。现有 Pages 内容保留，发行后手动部署新版清单。
+- `Stale PRs` 定时工作流已在 GitHub 禁用；网页预览及其自动构建已删除。GitHub Pages 仅部署 `updates-feed/` 中的 stable/dev/changelog JSON，手动运行 `Publish update feed` 工作流即可发布更新清单。
 - 无 Android 真机/模拟器，尚无实机视觉、真实声卡或设备性能测试；iOS 同步源码未在 Windows 上构建。

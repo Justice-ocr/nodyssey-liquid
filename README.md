@@ -2,7 +2,7 @@
 
 # Nodyssey
 
-> **Liquid Theme Reveal fork**: [Implementation and Android build](docs/liquid-theme-reveal.md) · [Interactive preview](https://justice-ocr.github.io/nodyssey-liquid/) · [Validation](docs/liquid-validation.md). Independent Android package: `io.github.nodyssey.liquid`; not signed by the upstream author.
+> **Liquid Theme Reveal fork**: [Android implementation](docs/liquid-theme-reveal.md) · [Validation](docs/liquid-validation.md) · [Upstream sync](docs/upstream-sync-1.3.11.md). Independent Android package: `io.github.nodyssey.liquid`; not signed by the upstream author.
 
 **一个为 NodeSeek 而生的开源客户端**
 
