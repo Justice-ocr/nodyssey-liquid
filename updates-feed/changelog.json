@@ -2,6 +2,14 @@
   "schema": 1,
   "versions": [
     {
+      "versionName": "1.3.11.2",
+      "tag": "v1.3.11.2",
+      "notes": "Adds radar regex/category/exclusion filters and VPS valuation with manual/cached rates; summaries insert at the post/reply cursor. Same Liquid package/signature; code 167. Focused tests and release checks pass; no device validation.",
+      "publishedOn": "2026-11-17",
+      "preRelease": false,
+      "releaseUrl": "https://github.com/Justice-ocr/nodyssey-liquid/releases/tag/v1.3.11.2"
+    },
+    {
       "versionName": "1.3.11.1",
       "tag": "v1.3.11.1",
       "notes": "Sync upstream 1.3.11 with optional glass theme, unified mail inbox, home pinned posts, and network/account fixes. Preserve Liquid animation, audio and top-bar quick switch. Same package/signing identity; code 166.",

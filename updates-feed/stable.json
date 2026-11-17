@@ -1,15 +1,15 @@
 {
   "schema": 1,
   "channel": "stable",
-  "versionName": "1.3.11.1",
-  "tag": "v1.3.11.1",
-  "notes": "Sync upstream stable 1.3.11 (commit 35bd717d). Adds optional frosted-glass theme, unified mail inbox, home pinned-post preference, and upstream fixes. Preserves Liquid reveal/audio and top-bar sun/moon quick switching. Independent package/signature, in-place upgrade for Liquid installs. Full host suite has Windows Robolectric/DataStore filesystem failures also reproduced on pristine upstream; 117 focused UI tests pass. Android device validation outstanding.",
+  "versionName": "1.3.11.2",
+  "tag": "v1.3.11.2",
+  "notes": "Extends title radar with regex rules, category filters, and excluded words. Adds VPS renewal/resale valuation with cached or manual exchange rates and cursor-position insertion into posts/replies. Keeps Liquid package/signature. 61 focused tests, spotlessCheck, lintDebug, R8 release and APK signature/metadata checks pass; no physical-device validation.",
   "publishedOn": "2026-11-17",
   "apk": {
-    "name": "nodyssey-v1.3.11.1.apk",
-    "url": "https://github.com/Justice-ocr/nodyssey-liquid/releases/download/v1.3.11.1/nodyssey-v1.3.11.1.apk",
-    "sizeBytes": 12236230,
-    "sha256": "ab2aea65291c055576dbf0bb130a8ae26c150014e5f09df6075fa433c351261a"
+    "name": "nodyssey-v1.3.11.2.apk",
+    "url": "https://github.com/Justice-ocr/nodyssey-liquid/releases/download/v1.3.11.2/nodyssey-v1.3.11.2.apk",
+    "sizeBytes": 12255206,
+    "sha256": "014b04d90b31e0d285cd935589e270de3c6061962c5aa8b5081b4e15cb94b9ed"
   },
-  "releaseUrl": "https://github.com/Justice-ocr/nodyssey-liquid/releases/tag/v1.3.11.1"
+  "releaseUrl": "https://github.com/Justice-ocr/nodyssey-liquid/releases/tag/v1.3.11.2"
 }
