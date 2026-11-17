@@ -1,8 +1,5 @@
 name: Liquid preview
 on:
-  push:
-    branches: [feature/liquid-theme-reveal]
-    paths: ['liquid-preview/**', '.github/workflows/liquid-preview.yml']
   workflow_dispatch:
 permissions:
   contents: read

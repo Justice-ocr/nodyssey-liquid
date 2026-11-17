@@ -1,15 +1,15 @@
 {
   "schema": 1,
   "channel": "stable",
-  "versionName": "1.3.10.2",
-  "tag": "v1.3.10.2",
-  "notes": "Liquid 2: add a sun/moon quick-theme button to home, post detail, notifications, profile and settings top bars. Reuses liquid reveal and persisted theme preference; disabled in e-ink mode. Same independent package and signature; upgrades Liquid 1 without uninstalling. Android device validation still outstanding.",
-  "publishedOn": "2026-11-12",
+  "versionName": "1.3.11.1",
+  "tag": "v1.3.11.1",
+  "notes": "Sync upstream stable 1.3.11 (commit 35bd717d). Adds optional frosted-glass theme, unified mail inbox, home pinned-post preference, and upstream fixes. Preserves Liquid reveal/audio and top-bar sun/moon quick switching. Independent package/signature, in-place upgrade for Liquid installs. Full host suite has Windows Robolectric/DataStore filesystem failures also reproduced on pristine upstream; 117 focused UI tests pass. Android device validation outstanding.",
+  "publishedOn": "2026-11-17",
   "apk": {
-    "name": "nodyssey-v1.3.10.2.apk",
-    "url": "https://github.com/Justice-ocr/nodyssey-liquid/releases/download/v1.3.10.2/nodyssey-v1.3.10.2.apk",
-    "sizeBytes": 12172538,
-    "sha256": "aec0c1ce0b3c22161d1a8e9c26ade40ec5a19cbe24e0198ee074f60cae89daa7"
+    "name": "nodyssey-v1.3.11.1.apk",
+    "url": "https://github.com/Justice-ocr/nodyssey-liquid/releases/download/v1.3.11.1/nodyssey-v1.3.11.1.apk",
+    "sizeBytes": 12236230,
+    "sha256": "ab2aea65291c055576dbf0bb130a8ae26c150014e5f09df6075fa433c351261a"
   },
-  "releaseUrl": "https://github.com/Justice-ocr/nodyssey-liquid/releases/tag/v1.3.10.2"
+  "releaseUrl": "https://github.com/Justice-ocr/nodyssey-liquid/releases/tag/v1.3.11.1"
 }

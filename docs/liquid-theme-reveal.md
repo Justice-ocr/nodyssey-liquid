@@ -1,6 +1,6 @@
 # Liquid Theme Reveal — Nodyssey 分支
 
-本改动基于 `weishiair/nodyssey` 的 `29e60a79`，保留 Kotlin Multiplatform / Compose、原有导航、设置仓库和业务状态。**并未把 Android 项目重写成网页。**
+本改动最初基于 `weishiair/nodyssey` 的 `29e60a79`，当前已同步稳定 `main@35bd717d`（上游 1.3.11），详见[同步记录](upstream-sync-1.3.11.md)。保留 Kotlin Multiplatform / Compose、原有导航、设置仓库和业务状态。**并未把 Android 项目重写成网页。**
 
 - Android：首页账号左侧新增太阳/月亮按钮，帖子详情、通知、个人页、设置页顶栏也可一键切换。点击从该按钮底缘启动同一液体动画；沿用设置仓库记住深浅偏好，墨水屏模式下禁用。`设置 → 明暗` 原有分段按钮继续保留，下方为动画、音效、音量与短试听。音效默认关闭。
 - 网页预览：[`liquid-preview/`](../liquid-preview/README.md)，React + TypeScript + Vite + CSS + 动态 SVG + Web Audio，独立演示，不连接论坛 API。在线入口：https://justice-ocr.github.io/nodyssey-liquid/ 。
@@ -29,7 +29,7 @@
 
 没有签名环境时，Release 产物是 **unsigned**，不能把它当作可安装交付。不要使用原分支的 `-Pnodyssey.echRelease=true` 冒充可覆盖原版的版本。当前 Fork 的更新源已经转为本 Fork，避免安装到签名不同的原作者构建。
 
-当前独立发行文件名为 `nodyssey-v1.3.10.2.apk`，内部版本 `1.3.10.2 (149)`；第四段为 Liquid 独立修订号，高于第一版的 `1.3.10 (148)`，可以原位升级。`liquid-preview/public/{stable,dev,changelog}.json` 与预览一起由 Pages workflow 部署，且只指向本 Fork APK。后续发行须一起更新这三个文件的版本、大小和 SHA-256，不能直接提供上游不同签名的构建。
+当前独立发行文件名为 `nodyssey-v1.3.11.1.apk`，内部版本 `1.3.11.1 (166)`；第四段为 Liquid 独立修订号，可以原位升级此前 Liquid 版本。`liquid-preview/public/{stable,dev,changelog}.json` 与预览一起由 Pages workflow 部署，且只指向本 Fork APK。后续发行须一起更新这三个文件的版本、大小和 SHA-256，不能直接提供上游不同签名的构建。
 
 ## 原生实现
 

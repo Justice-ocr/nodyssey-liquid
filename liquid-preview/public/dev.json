@@ -1,15 +1,15 @@
 {
   "schema": 1,
   "channel": "dev",
-  "versionName": "1.3.10.2",
-  "tag": "v1.3.10.2",
-  "notes": "Liquid 2: top-bar quick theme switching. Both channels currently resolve to the same independently signed APK, not an upstream-signed build. Android device validation still outstanding.",
-  "publishedOn": "2026-11-12",
+  "versionName": "1.3.11.1",
+  "tag": "v1.3.11.1",
+  "notes": "Upstream 1.3.11 sync + retained Liquid features. Both channels currently resolve to the same independently signed APK, not an upstream-signed build. See release notes for Windows host test limitations.",
+  "publishedOn": "2026-11-17",
   "apk": {
-    "name": "nodyssey-v1.3.10.2.apk",
-    "url": "https://github.com/Justice-ocr/nodyssey-liquid/releases/download/v1.3.10.2/nodyssey-v1.3.10.2.apk",
-    "sizeBytes": 12172538,
-    "sha256": "aec0c1ce0b3c22161d1a8e9c26ade40ec5a19cbe24e0198ee074f60cae89daa7"
+    "name": "nodyssey-v1.3.11.1.apk",
+    "url": "https://github.com/Justice-ocr/nodyssey-liquid/releases/download/v1.3.11.1/nodyssey-v1.3.11.1.apk",
+    "sizeBytes": 12236230,
+    "sha256": "ab2aea65291c055576dbf0bb130a8ae26c150014e5f09df6075fa433c351261a"
   },
-  "releaseUrl": "https://github.com/Justice-ocr/nodyssey-liquid/releases/tag/v1.3.10.2"
+  "releaseUrl": "https://github.com/Justice-ocr/nodyssey-liquid/releases/tag/v1.3.11.1"
 }
