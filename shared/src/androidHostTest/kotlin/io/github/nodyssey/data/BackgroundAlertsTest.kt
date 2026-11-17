@@ -84,6 +84,59 @@ class BackgroundAlertsTest {
     }
 
     @Test
+    fun `Pulse Radar applies regex board and exclusion filters before notifying`() {
+        val latest = listOf(
+            post(9, "VPS 2GB 求购").copy(categorySlug = "trade"),
+            post(8, "VPS 2GB 出售").copy(categorySlug = "trade"),
+            post(7, "VPS 4GB 出售").copy(categorySlug = "tech"),
+        )
+
+        val (hits, baseline) = alertRuleHits(
+            baseline = 6,
+            latest = latest,
+            rules = listOf(TitleAlertRule("\\d+GB", isRegex = true)),
+            excludedWords = listOf("求购"),
+            categorySlugs = setOf("trade"),
+        )
+
+        assertEquals(listOf(8L), hits.map { it.postId })
+        assertEquals("\\d+GB", hits.single().keyword)
+        assertEquals(9L, baseline)
+    }
+
+    @Test
+    fun `selected boards use board-specific lists and normalized exclusion filters`() = runTest {
+        val settings = testSettingsRepository(backgroundScope)
+        settings.setKeywordAlertBaseline(1)
+        settings.setAlertCategorySlugs(listOf("TRADE", "invalid slug"))
+        settings.setAlertExcludedWords(listOf("Wanted"))
+        keywords.addAlertRule("vps", isRegex = false)
+        val loadedBoards = mutableListOf<String>()
+        val checker = BackgroundAlertChecker(
+            loadList = { _, _ -> error("mixed feed must not be queried while a board filter is active") },
+            loadCategoryList = { slug, _, _ ->
+                loadedBoards += slug
+                when (slug) {
+                    "trade" -> listOf(post(2, "VPS wanted").copy(categorySlug = "trade"), post(3, "VPS available").copy(categorySlug = "trade"))
+                    else -> emptyList()
+                }
+            },
+            keywords = keywords,
+            tracked = tracked,
+            settings = settings,
+        )
+
+        assertEquals(listOf(3L), checker.checkKeywords().map { it.postId })
+        assertEquals(listOf("trade"), loadedBoards)
+    }
+
+    @Test
+    fun `a malformed alert regex is refused`() = runTest {
+        assertEquals(false, keywords.addAlertRule("[", isRegex = true))
+        assertEquals(emptyList<TitleAlertRule>(), keywords.currentAlertRules())
+    }
+
+    @Test
     fun `a thread the site marked blocked is never announced`() {
         val (hits, _) = keywordHits(baseline = 1, latest = listOf(post(2, "vps", blocked = true)), keywords = listOf("vps"))
 

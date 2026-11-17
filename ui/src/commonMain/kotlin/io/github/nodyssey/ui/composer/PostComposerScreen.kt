@@ -65,12 +65,14 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.viewmodel.compose.viewModel
 import io.github.nodyssey.core.NodeSeekSite
 import io.github.nodyssey.data.Board
 import io.github.nodyssey.data.composer.ImageAttachment
 import io.github.nodyssey.data.composer.PostDraft
 import io.github.nodyssey.data.composer.PostPermission
 import io.github.nodyssey.data.composer.UploadFailure
+import io.github.nodyssey.data.valuation.ExchangeRateRepository
 import io.github.nodyssey.ui.common.SiteErrorState
 import io.github.nodyssey.ui.common.describedAsLoading
 import io.github.nodyssey.ui.common.webViewUrl
@@ -109,6 +111,9 @@ import io.github.nodyssey.ui.resources.composer_view_compare
 import io.github.nodyssey.ui.resources.composer_view_content
 import io.github.nodyssey.ui.resources.composer_view_preview
 import io.github.nodyssey.ui.stardust.StardustReceiveComposeDialog
+import io.github.nodyssey.ui.tools.VpsValuationDialog
+import io.github.nodyssey.ui.tools.VpsValuationViewModel
+import io.github.nodyssey.ui.tools.vpsValuationViewModelFactory
 import io.github.nodyssey.ui.vote.VoteComposeDialog
 import io.github.plaza.core.TimeFormat
 import io.github.plaza.core.net.SiteError
@@ -143,8 +148,15 @@ fun PostComposerRoute(
     modifier: Modifier = Modifier,
     /** Opens whatever this editor is about in the web view — the thread, or the new-post page. */
     onOpenBrowser: (String) -> Unit = onVerify,
+    exchangeRateRepository: ExchangeRateRepository? = null,
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
+    var composingValuation by rememberSaveable { mutableStateOf(false) }
+    val valuationViewModel: VpsValuationViewModel? = if (composingValuation && exchangeRateRepository != null) {
+        viewModel(factory = vpsValuationViewModelFactory(exchangeRateRepository))
+    } else {
+        null
+    }
     val snackbarHostState = remember { SnackbarHostState() }
 
     PublishErrorSnackbar(
@@ -197,8 +209,19 @@ fun PostComposerRoute(
         onDismissVoteCreation = viewModel::dismissVoteCreation,
         payeeUid = viewModel::receiveCodePayeeUid,
         onInsertReceiveCode = viewModel::insertReceiveCode,
+        onOpenValuation = { composingValuation = true },
         modifier = modifier,
     )
+    if (composingValuation && valuationViewModel != null) {
+        VpsValuationDialog(
+            viewModel = valuationViewModel,
+            onDismiss = { composingValuation = false },
+            onInsertMarkdown = { markdown ->
+                viewModel.insertMarkdown(markdown)
+                composingValuation = false
+            },
+        )
+    }
 }
 
 @Composable
@@ -293,6 +316,7 @@ fun PostComposerScreen(
     onDismissVoteCreation: () -> Unit = {},
     payeeUid: () -> Long? = { null },
     onInsertReceiveCode: (Int, Long, String, Boolean) -> Unit = { _, _, _, _ -> },
+    onOpenValuation: () -> Unit = {},
 ) {
     // While a publish is in flight the request may already have created the topic; leaving now would
     // cancel the ViewModel, keep the draft, and set up a duplicate post on the next attempt. Preview
@@ -363,6 +387,7 @@ fun PostComposerScreen(
                 onDismissVoteCreation = onDismissVoteCreation,
                 payeeUid = payeeUid,
                 onInsertReceiveCode = onInsertReceiveCode,
+                onOpenValuation = onOpenValuation,
                 modifier = Modifier.paddingWithKeyboard(padding),
             )
         }
@@ -527,6 +552,7 @@ private fun EditorContent(
     onDismissVoteCreation: () -> Unit,
     payeeUid: () -> Long?,
     onInsertReceiveCode: (Int, Long, String, Boolean) -> Unit,
+    onOpenValuation: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val editorState = rememberMarkdownEditorState()
@@ -593,6 +619,7 @@ private fun EditorContent(
                 ComposerAppMenu(
                     onInsertVote = { composingVote = true },
                     onInsertStardust = { composingReceiveCode = true },
+                    onInsertValuation = onOpenValuation,
                 )
             },
         )

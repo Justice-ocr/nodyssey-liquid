@@ -71,6 +71,22 @@ class ReplyComposerViewModelTest {
      * code inserted from a floor cannot come out shaped differently from one in an opening post.
      */
     @Test
+    fun `valuation markdown is inserted at the caret without replacing the reply draft`() = runTest(dispatcher) {
+        val viewModel = viewModel()
+        viewModel.open()
+        advanceUntilIdle()
+        viewModel.bodyState.typeText("beforeafter")
+        viewModel.bodyState.edit { selection = androidx.compose.ui.text.TextRange(6) }
+
+        viewModel.insertMarkdown("estimate")
+        runCurrent()
+
+        assertEquals("beforeestimateafter", viewModel.bodyState.text.toString())
+        assertEquals("beforeestimateafter", viewModel.uiState.value.body)
+        assertEquals(androidx.compose.ui.text.TextRange(14), viewModel.bodyState.selection)
+    }
+
+    @Test
     fun `inserting a receive code from the reply sheet writes the same marker`() = runTest(dispatcher) {
         val viewModel = viewModel(profiles = FakeReplyProfileRepository(uid = 52_425))
         viewModel.open()

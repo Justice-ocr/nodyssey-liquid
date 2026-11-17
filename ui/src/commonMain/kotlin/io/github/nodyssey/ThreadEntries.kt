@@ -94,6 +94,7 @@ internal fun EntryProviderScope<NavKey>.threadEntries(nav: StackEntryScope) = wi
             modifier = Modifier.sharedThreadSurface(key.postId, key.preview?.origin),
             viewModel = viewModel,
             replyViewModel = replyViewModel,
+            exchangeRateRepository = container.exchangeRateRepository,
             // By identity: the stack hands the entry this very key, and an equal key further down
             // is a different page.
             replyCovered = backStack.lastOrNull() !== key,
@@ -184,6 +185,7 @@ internal fun EntryProviderScope<NavKey>.threadEntries(nav: StackEntryScope) = wi
             onOpenBrowser = {
                 backStack.add(WebKey(webUrl, siteTitle, WebViewGoal.MANAGE))
             },
+            exchangeRateRepository = container.exchangeRateRepository,
             onPublished = { postId ->
                 backStack.removeLastOrNull()
                 // An edit returns to the thread it came from, which is already underneath —

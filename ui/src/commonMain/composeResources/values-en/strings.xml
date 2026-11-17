@@ -1177,6 +1177,7 @@
     <string name="stardust_receive_confirm_ok">Pay</string>
 
     <string name="composer_insert_stardust">Insert a stardust request</string>
+    <string name="composer_insert_valuation">Insert VPS valuation</string>
     <string name="stardust_compose_title">Insert a stardust request</string>
     <string name="stardust_compose_amount">Amount</string>
     <string name="stardust_compose_amount_hint">How much stardust to ask for</string>
@@ -1520,6 +1521,10 @@
     <string name="keywords_regex_placeholder">A pattern to match in titles</string>
     <string name="keywords_regex_invalid">This is not a valid regular expression</string>
     <string name="keywords_rule_regex">Regular expression</string>
+    <string name="keywords_alert_categories">Boards to monitor</string>
+    <string name="keywords_alert_categories_hint">Blank means all boards; comma-separated slugs, e.g. tech, trade</string>
+    <string name="keywords_alert_exclusions">Exclude words</string>
+    <string name="keywords_alert_exclusions_hint">Skip titles containing these words, comma-separated</string>
     <string name="block_titles_footer">Threads whose titles contain one of these words, or match one of these patterns, are hidden from the home feed, boards and search. Matching ignores case. Kept on this device only, not on your account. Show blocked content reveals them too.</string>
     <string name="notify_app_alerts_section">App alerts</string>
     <string name="notify_keyword_alerts">Keyword alerts</string>
@@ -1851,4 +1856,36 @@
     <string name="mail_recipient_address">To: %1$s</string>
     <string name="settings_frosted_glass">Frosted glass chrome</string>
     <string name="settings_frosted_glass_hint">Floating translucent bottom bar and specular rims; post cards stay solid for reading contrast</string>
+    <string name="vps_title">VPS remaining value</string>
+    <string name="vps_currency">Currency</string>
+    <string name="vps_cycle">Renewal cycle</string>
+    <string name="vps_cycle_month">Monthly</string>
+    <string name="vps_cycle_quarter">Quarterly</string>
+    <string name="vps_cycle_half_year">Half-year</string>
+    <string name="vps_cycle_year">Yearly</string>
+    <string name="vps_renewal_price">Renewal price</string>
+    <string name="vps_expires_on">Expiry date (YYYY-MM-DD)</string>
+    <string name="vps_ask_price">Asking price</string>
+    <string name="vps_transfer_fee">Transfer fee</string>
+    <string name="vps_broker_percent">Broker fee (%)</string>
+    <string name="vps_fee_payer">Fee paid by</string>
+    <string name="vps_fee_payer_buyer">Buyer</string>
+    <string name="vps_fee_payer_seller">Seller</string>
+    <string name="vps_fee_payer_split">Split equally</string>
+    <string name="vps_manual_rate">Rate (CNY per currency unit)</string>
+    <string name="vps_clear_manual_rate">Use automatic rate</string>
+    <string name="vps_rate_fresh">Rate date: %1$s · 1 unit = CNY %2$s</string>
+    <string name="vps_rate_stale">Cached offline rate, dated %1$s · 1 unit = CNY %2$s</string>
+    <string name="vps_rate_manual">Manual rate in use</string>
+    <string name="vps_rate_unavailable">Rate unavailable. Enter a manual rate; valuation in the selected currency still works.</string>
+    <string name="vps_remaining_value">Remaining-cycle value</string>
+    <string name="vps_remaining_days">%1$d of %2$d days remaining</string>
+    <string name="vps_buyer_total">Estimated buyer total: %1$s</string>
+    <string name="vps_seller_receives">Estimated seller proceeds: %1$s</string>
+    <string name="vps_invalid_input">Check the amount, percentage and expiry date.</string>
+    <string name="vps_insert_markdown">Insert estimate</string>
+    <string name="vps_markdown_cny">(about CNY %1$s)</string>
+    <string name="vps_markdown_summary">VPS remaining-cycle value: %1$s %2$s%3$s, with %4$d/%5$d days remaining.</string>
+    <string name="vps_markdown_deal">Asking price %1$s; estimated buyer total %2$s and seller proceeds %3$s.</string>
+    <string name="vps_tools_subtitle">Estimate remaining value, FX and transfer fees</string>
 </resources>

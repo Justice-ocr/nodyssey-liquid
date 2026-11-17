@@ -1407,6 +1407,7 @@
     <!-- 插入星辰收款码, in the editors' APP menu -->
     <string name="composer_app_menu">APP</string>
     <string name="composer_insert_stardust">插入星辰收款码</string>
+    <string name="composer_insert_valuation">插入 VPS 估值</string>
     <string name="stardust_compose_title">插入星辰收款码</string>
     <string name="stardust_compose_amount">数额</string>
     <string name="stardust_compose_amount_hint">要收多少星辰</string>
@@ -1789,6 +1790,10 @@
     <string name="keywords_regex_placeholder">输入正则表达式，标题里能匹配到就算</string>
     <string name="keywords_regex_invalid">这条正则表达式写得不对</string>
     <string name="keywords_rule_regex">正则表达式</string>
+    <string name="keywords_alert_categories">监控版块</string>
+    <string name="keywords_alert_categories_hint">留空表示全部；输入版块 slug，以逗号分隔，如 tech, trade</string>
+    <string name="keywords_alert_exclusions">排除词</string>
+    <string name="keywords_alert_exclusions_hint">标题包含这些词时不提醒，以逗号分隔</string>
     <string name="block_titles_footer">标题含这些词、或能被这些正则表达式匹配到的帖子，不出现在首页、版块和搜索里；匹配不区分大小写。只存在这台手机上，不随账号走；「临时显示被屏蔽内容」打开时也会一并显示。</string>
     <!-- 通知设置里 App 自己的两种提醒：关键词命中新帖、追踪的帖子有新回复 -->
     <string name="notify_app_alerts_section">App 提醒</string>
@@ -2129,4 +2134,36 @@
     <string name="mail_recipient_address">收件地址：%1$s</string>
     <string name="settings_frosted_glass">毛玻璃质感</string>
     <string name="settings_frosted_glass_hint">悬浮胶囊底栏与顶栏半透明高光；帖子卡片保持纯色以确保阅读对比度</string>
+    <string name="vps_title">VPS 剩余价值估算</string>
+    <string name="vps_currency">币种</string>
+    <string name="vps_cycle">续费周期</string>
+    <string name="vps_cycle_month">月</string>
+    <string name="vps_cycle_quarter">季度</string>
+    <string name="vps_cycle_half_year">半年</string>
+    <string name="vps_cycle_year">年</string>
+    <string name="vps_renewal_price">续费金额</string>
+    <string name="vps_expires_on">到期日（YYYY-MM-DD）</string>
+    <string name="vps_ask_price">转让挂牌价</string>
+    <string name="vps_transfer_fee">过户费</string>
+    <string name="vps_broker_percent">中介费比例（%）</string>
+    <string name="vps_fee_payer">费用承担方</string>
+    <string name="vps_fee_payer_buyer">买家</string>
+    <string name="vps_fee_payer_seller">卖家</string>
+    <string name="vps_fee_payer_split">双方平摊</string>
+    <string name="vps_manual_rate">汇率（1 单位外币兑人民币）</string>
+    <string name="vps_clear_manual_rate">恢复自动汇率</string>
+    <string name="vps_rate_fresh">汇率日期：%1$s · 1 单位 = CNY %2$s</string>
+    <string name="vps_rate_stale">离线缓存汇率，日期：%1$s · 1 单位 = CNY %2$s</string>
+    <string name="vps_rate_manual">使用手动汇率</string>
+    <string name="vps_rate_unavailable">汇率不可用；可输入手动汇率，估值仍可按原币种计算</string>
+    <string name="vps_remaining_value">周期剩余价值</string>
+    <string name="vps_remaining_days">剩余 %1$d / %2$d 天</string>
+    <string name="vps_buyer_total">买家预计支付：%1$s</string>
+    <string name="vps_seller_receives">卖家预计实收：%1$s</string>
+    <string name="vps_invalid_input">请检查金额、比例和到期日</string>
+    <string name="vps_insert_markdown">插入估值摘要</string>
+    <string name="vps_markdown_cny">（约 CNY %1$s）</string>
+    <string name="vps_markdown_summary">VPS 周期剩余价值：%1$s %2$s%3$s，剩余 %4$d/%5$d 天。</string>
+    <string name="vps_markdown_deal">挂牌价 %1$s；买家预计支付 %2$s，卖家预计实收 %3$s。</string>
+    <string name="vps_tools_subtitle">剩余价值、汇率及交易费用估算</string>
 </resources>

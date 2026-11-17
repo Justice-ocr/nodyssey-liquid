@@ -3,7 +3,7 @@ package io.github.nodyssey.data
 import io.github.nodyssey.data.settings.SettingsRepository
 import io.github.nodyssey.model.FeedSort
 import io.github.nodyssey.model.PostSummary
-import io.github.nodyssey.model.TitleKeywordKind
+import kotlinx.coroutines.flow.first
 
 /** A new thread whose title holds one of the reader's 提醒关键词. */
 data class KeywordHit(
@@ -31,18 +31,34 @@ fun keywordHits(
     baseline: Long?,
     latest: List<PostSummary>,
     keywords: List<String>,
+): Pair<List<KeywordHit>, Long?> =
+    alertRuleHits(baseline, latest, keywords.map { TitleAlertRule(it, false) }, emptyList(), emptySet())
+
+/** Pure Pulse Radar match: category, exclusion and include rules are applied before a hit is emitted. */
+fun alertRuleHits(
+    baseline: Long?,
+    latest: List<PostSummary>,
+    rules: List<TitleAlertRule>,
+    excludedWords: List<String>,
+    categorySlugs: Set<String>,
 ): Pair<List<KeywordHit>, Long?> {
     val newest = latest.maxOfOrNull { it.postId }
     val nextBaseline = listOfNotNull(baseline, newest).maxOrNull()
     if (baseline == null) return emptyList<KeywordHit>() to nextBaseline
-    val hits =
-        latest
-            // Blocked rows are the site saying "not for this reader"; a notification would undo that.
-            .filter { it.postId > baseline && !it.isBlocked }
-            .mapNotNull { post ->
-                val title = post.title.lowercase()
-                keywords.firstOrNull { title.contains(it) }?.let { KeywordHit(post.postId, post.title, it) }
-            }.sortedBy { it.postId }
+    val regexRules = rules.filter(TitleAlertRule::isRegex).mapNotNull { rule ->
+        runCatching { rule to Regex(rule.text, RegexOption.IGNORE_CASE) }.getOrNull()
+    }
+    val plainRules = rules.filterNot(TitleAlertRule::isRegex)
+    val hits = latest
+        .filter { it.postId > baseline && !it.isBlocked }
+        .filter { categorySlugs.isEmpty() || it.categorySlug in categorySlugs }
+        .filterNot { post -> excludedWords.any { post.title.contains(it, ignoreCase = true) } }
+        .mapNotNull { post ->
+            val rule = plainRules.firstOrNull { post.title.contains(it.text, ignoreCase = true) }
+                ?: regexRules.firstOrNull { (_, regex) -> regex.containsMatchIn(post.title) }?.first
+            rule?.let { KeywordHit(post.postId, post.title, it.text) }
+        }
+        .sortedBy { it.postId }
     return hits to nextBaseline
 }
 
@@ -78,12 +94,25 @@ class BackgroundAlertChecker(
     private val keywords: TitleKeywordStore,
     private val tracked: TrackedThreadStore,
     private val settings: SettingsRepository,
+    private val loadCategoryList: suspend (categorySlug: String, sort: FeedSort, page: Int) -> List<PostSummary> = { _, sort, page -> loadList(sort, page) },
 ) {
-    /** One request, and none at all while there is no keyword to look for. */
+    /** One request per selected board, or one mixed-feed request when no board filter is set. */
     suspend fun checkKeywords(): List<KeywordHit> {
-        val words = keywords.current(TitleKeywordKind.ALERT)
-        if (words.isEmpty()) return emptyList()
-        val (hits, baseline) = keywordHits(settings.keywordAlertBaseline(), loadList(FeedSort.POST_TIME, 1), words)
+        val rules = keywords.currentAlertRules()
+        if (rules.isEmpty()) return emptyList()
+        val filters = settings.settings.first()
+        val latest = if (filters.alertCategorySlugs.isEmpty()) {
+            loadList(FeedSort.POST_TIME, 1)
+        } else {
+            filters.alertCategorySlugs.flatMap { slug -> loadCategoryList(slug, FeedSort.POST_TIME, 1) }
+        }.distinctBy(PostSummary::postId)
+        val (hits, baseline) = alertRuleHits(
+            settings.keywordAlertBaseline(),
+            latest,
+            rules,
+            filters.alertExcludedWords,
+            filters.alertCategorySlugs.toSet(),
+        )
         baseline?.let { settings.setKeywordAlertBaseline(it) }
         return hits
     }

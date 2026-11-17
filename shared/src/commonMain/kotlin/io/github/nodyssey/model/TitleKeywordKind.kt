@@ -11,6 +11,9 @@ enum class TitleKeywordKind {
     /** Notify when a new thread matches. */
     ALERT,
 
+    /** Notify when a new thread title matches a regular expression. */
+    ALERT_REGEX,
+
     /**
      * Hide threads whose title a regular expression finds a match in. Kept as typed rather than
      * lower-cased — `\D` is not `\d` — and matched case-insensitively in Kotlin, because SQLite has

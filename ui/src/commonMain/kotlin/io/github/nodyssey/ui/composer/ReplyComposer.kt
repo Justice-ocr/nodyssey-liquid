@@ -60,9 +60,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
+import androidx.lifecycle.viewmodel.compose.viewModel
 import io.github.nodyssey.data.composer.ImageAttachment
 import io.github.nodyssey.data.composer.PickedImage
 import io.github.nodyssey.data.composer.UploadFailure
+import io.github.nodyssey.data.valuation.ExchangeRateRepository
 import io.github.nodyssey.ui.common.describedAsLoading
 import io.github.nodyssey.ui.common.siteErrorRecovery
 import io.github.nodyssey.ui.resources.Res
@@ -89,6 +91,9 @@ import io.github.nodyssey.ui.resources.post_reply_publish_failed
 import io.github.nodyssey.ui.resources.post_reply_publish_unavailable
 import io.github.nodyssey.ui.resources.post_reply_quote_remove
 import io.github.nodyssey.ui.stardust.StardustReceiveComposeDialog
+import io.github.nodyssey.ui.tools.VpsValuationDialog
+import io.github.nodyssey.ui.tools.VpsValuationViewModel
+import io.github.nodyssey.ui.tools.vpsValuationViewModelFactory
 import io.github.nodyssey.ui.vote.VoteComposeDialog
 import io.github.plaza.core.TimeFormat
 import io.github.plaza.core.net.SiteError
@@ -172,6 +177,8 @@ fun ReplyComposerHost(
     payeeUid: () -> Long?,
     onInsertReceiveCode: (Int, Long, String, Boolean) -> Unit,
     modifier: Modifier = Modifier,
+    onInsertMarkdown: (String) -> Unit = {},
+    exchangeRateRepository: ExchangeRateRepository? = null,
 ) {
     // Above the early return on purpose: the host stays composed while the sheet is closed, so
     // this is the one place the recents survive both the emoji panel and the sheet being dismissed.
@@ -188,6 +195,7 @@ fun ReplyComposerHost(
     // a ModalBottomSheet's content stacks two windows, and the sheet's own scrim ends up over it.
     var composingVote by rememberSaveable { mutableStateOf(false) }
     var composingReceiveCode by rememberSaveable { mutableStateOf(false) }
+    var composingValuation by rememberSaveable { mutableStateOf(false) }
     // A sheet as well, so a sibling for the wrench panel's reason.
     var pickingHosted by rememberSaveable { mutableStateOf(false) }
     val launchPicker =
@@ -239,6 +247,7 @@ fun ReplyComposerHost(
             onCustomize = { customizing = true },
             onInsertVote = { composingVote = true },
             onInsertStardust = { composingReceiveCode = true },
+            onOpenValuation = { composingValuation = true },
         )
     }
 
@@ -248,6 +257,18 @@ fun ReplyComposerHost(
             onChange = onToolbarChange,
             onReset = onToolbarReset,
             onDismiss = { customizing = false },
+        )
+    }
+
+    if (composingValuation && exchangeRateRepository != null) {
+        val valuationViewModel: VpsValuationViewModel = viewModel(factory = vpsValuationViewModelFactory(exchangeRateRepository))
+        VpsValuationDialog(
+            viewModel = valuationViewModel,
+            onDismiss = { composingValuation = false },
+            onInsertMarkdown = { markdown ->
+                onInsertMarkdown(markdown)
+                composingValuation = false
+            },
         )
     }
 
@@ -301,6 +322,7 @@ private fun ReplyEditorSheet(
     onCustomize: () -> Unit,
     onInsertVote: () -> Unit,
     onInsertStardust: () -> Unit,
+    onOpenValuation: () -> Unit = {},
 ) {
     val keyboard = LocalSoftwareKeyboardController.current
     val stickerPictures = rememberStickerPictures()
@@ -450,7 +472,7 @@ private fun ReplyEditorSheet(
                 onFormatted = { bodyFocus.requestFocus() },
                 onCustomize = onCustomize,
                 appMenu = {
-                    ComposerAppMenu(onInsertVote = onInsertVote, onInsertStardust = onInsertStardust)
+                    ComposerAppMenu(onInsertVote = onInsertVote, onInsertStardust = onInsertStardust, onInsertValuation = onOpenValuation)
                 },
                 emojiPanel = { panel ->
                     NodeSeekEmojiPanel(

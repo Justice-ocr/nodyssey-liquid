@@ -42,6 +42,8 @@ import io.github.nodyssey.ui.resources.tools_providers_subtitle
 import io.github.nodyssey.ui.resources.tools_ruling
 import io.github.nodyssey.ui.resources.tools_ruling_subtitle
 import io.github.nodyssey.ui.resources.tools_title
+import io.github.nodyssey.ui.resources.vps_title
+import io.github.nodyssey.ui.resources.vps_tools_subtitle
 import io.github.plaza.designsys.component.GroupedRow
 import io.github.plaza.designsys.component.LayerPageGutter
 import io.github.plaza.designsys.component.OneHandTopAppBar
@@ -77,6 +79,7 @@ fun CommunityToolsScreen(
     onAboutCommunity: () -> Unit,
     modifier: Modifier = Modifier,
     onMail: () -> Unit = {},
+    onVpsValuation: () -> Unit = {},
 ) {
     val appBarState = rememberOneHandAppBarState()
     Scaffold(
@@ -170,6 +173,15 @@ fun CommunityToolsScreen(
                     )
                 }
             }
+
+            GroupedRow(
+                title = stringResource(Res.string.vps_title),
+                subtitle = stringResource(Res.string.vps_tools_subtitle),
+                icon = Icons.Default.ShoppingCart,
+                first = true,
+                last = true,
+                onClick = onVpsValuation,
+            )
 
             GroupedRow(
                 title = stringResource(Res.string.mail_title),

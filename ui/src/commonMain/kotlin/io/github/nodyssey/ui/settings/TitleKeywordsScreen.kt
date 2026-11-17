@@ -2,6 +2,7 @@ package io.github.nodyssey.ui.settings
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -12,6 +13,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Close
+import androidx.compose.material3.Checkbox
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -22,23 +24,33 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import io.github.nodyssey.data.TitleAlertRule
 import io.github.nodyssey.model.TitleKeywordKind
 import io.github.nodyssey.ui.resources.Res
 import io.github.nodyssey.ui.resources.action_back
 import io.github.nodyssey.ui.resources.keywords_add_action
 import io.github.nodyssey.ui.resources.keywords_add_placeholder
+import io.github.nodyssey.ui.resources.keywords_alert_categories
+import io.github.nodyssey.ui.resources.keywords_alert_categories_hint
+import io.github.nodyssey.ui.resources.keywords_alert_exclusions
+import io.github.nodyssey.ui.resources.keywords_alert_exclusions_hint
 import io.github.nodyssey.ui.resources.keywords_alert_footer
 import io.github.nodyssey.ui.resources.keywords_alert_title
 import io.github.nodyssey.ui.resources.keywords_block_footer
 import io.github.nodyssey.ui.resources.keywords_block_title
 import io.github.nodyssey.ui.resources.keywords_empty
+import io.github.nodyssey.ui.resources.keywords_regex_invalid
+import io.github.nodyssey.ui.resources.keywords_regex_placeholder
+import io.github.nodyssey.ui.resources.keywords_regex_toggle
 import io.github.nodyssey.ui.resources.keywords_remove
+import io.github.nodyssey.ui.resources.keywords_rule_regex
 import io.github.plaza.designsys.component.GroupedListItem
 import io.github.plaza.designsys.component.LayerPageGutter
 import io.github.plaza.designsys.component.OneHandTopAppBar
@@ -62,6 +74,10 @@ fun TitleKeywordsRoute(
         onInputChange = viewModel::onInputChange,
         onAdd = viewModel::add,
         onRemove = viewModel::remove,
+        onRemoveAlertRule = viewModel::removeAlertRule,
+        onRegexChange = viewModel::setRegex,
+        onCategorySlugsChange = viewModel::setCategorySlugs,
+        onExcludedWordsChange = viewModel::setExcludedWords,
         modifier = modifier,
     )
 }
@@ -75,6 +91,10 @@ fun TitleKeywordsScreen(
     onInputChange: (String) -> Unit,
     onAdd: () -> Unit,
     onRemove: (String) -> Unit,
+    onRemoveAlertRule: (TitleAlertRule) -> Unit,
+    onRegexChange: (Boolean) -> Unit,
+    onCategorySlugsChange: (String) -> Unit,
+    onExcludedWordsChange: (String) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val appBarState = rememberOneHandAppBarState()
@@ -107,18 +127,50 @@ fun TitleKeywordsScreen(
                 onValueChange = onInputChange,
                 modifier = Modifier.fillMaxWidth(),
                 singleLine = true,
-                placeholder = { Text(stringResource(Res.string.keywords_add_placeholder)) },
+                placeholder = { Text(stringResource(if (alerts && state.isRegex) Res.string.keywords_regex_placeholder else Res.string.keywords_add_placeholder)) },
                 shape = PlazaFieldDefaults.shape,
                 colors = PlazaFieldDefaults.colors(),
                 keyboardOptions = KeyboardOptions(autoCorrectEnabled = false, imeAction = ImeAction.Done),
                 keyboardActions = KeyboardActions(onDone = { onAdd() }),
                 trailingIcon = {
-                    TextButton(onClick = onAdd, enabled = state.input.isNotBlank()) {
+                    TextButton(onClick = onAdd, enabled = state.input.isNotBlank() && !state.invalidPattern) {
                         Text(stringResource(Res.string.keywords_add_action))
                     }
                 },
+                supportingText = if (state.invalidPattern) {
+                    { Text(stringResource(Res.string.keywords_regex_invalid), color = MaterialTheme.colorScheme.error) }
+                } else {
+                    null
+                },
             )
-            if (state.keywords.isEmpty()) {
+            if (alerts) {
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Checkbox(checked = state.isRegex, onCheckedChange = onRegexChange)
+                    Text(stringResource(Res.string.keywords_regex_toggle), style = MaterialTheme.typography.bodyMedium)
+                }
+                OutlinedTextField(
+                    value = state.categorySlugs,
+                    onValueChange = onCategorySlugsChange,
+                    modifier = Modifier.fillMaxWidth(),
+                    singleLine = true,
+                    label = { Text(stringResource(Res.string.keywords_alert_categories)) },
+                    placeholder = { Text(stringResource(Res.string.keywords_alert_categories_hint)) },
+                    shape = PlazaFieldDefaults.shape,
+                    colors = PlazaFieldDefaults.colors(),
+                )
+                OutlinedTextField(
+                    value = state.excludedWords,
+                    onValueChange = onExcludedWordsChange,
+                    modifier = Modifier.fillMaxWidth(),
+                    singleLine = true,
+                    label = { Text(stringResource(Res.string.keywords_alert_exclusions)) },
+                    placeholder = { Text(stringResource(Res.string.keywords_alert_exclusions_hint)) },
+                    shape = PlazaFieldDefaults.shape,
+                    colors = PlazaFieldDefaults.colors(),
+                )
+            }
+            val displayedRules = if (alerts) state.alertRules else state.keywords.map { TitleAlertRule(it, false) }
+            if (displayedRules.isEmpty()) {
                 Text(
                     stringResource(Res.string.keywords_empty),
                     style = MaterialTheme.typography.bodyMedium,
@@ -127,14 +179,22 @@ fun TitleKeywordsScreen(
                 )
             } else {
                 Column {
-                    state.keywords.forEachIndexed { index, keyword ->
+                    displayedRules.forEachIndexed { index, rule ->
                         GroupedListItem(
                             first = index == 0,
-                            last = index == state.keywords.lastIndex,
-                            headlineContent = { Text(keyword, maxLines = 1, overflow = TextOverflow.Ellipsis) },
+                            last = index == displayedRules.lastIndex,
+                            headlineContent = {
+                                Text(
+                                    if (rule.isRegex) "${rule.text} · ${stringResource(Res.string.keywords_rule_regex)}" else rule.text,
+                                    maxLines = 1,
+                                    overflow = TextOverflow.Ellipsis,
+                                )
+                            },
                             trailingContent = {
-                                IconButton(onClick = { onRemove(keyword) }) {
-                                    Icon(Icons.Default.Close, contentDescription = stringResource(Res.string.keywords_remove, keyword))
+                                IconButton(onClick = {
+                                    if (alerts) onRemoveAlertRule(rule) else onRemove(rule.text)
+                                }) {
+                                    Icon(Icons.Default.Close, contentDescription = stringResource(Res.string.keywords_remove, rule.text))
                                 }
                             },
                         )
@@ -161,6 +221,10 @@ private fun TitleKeywordsPreview() {
             onInputChange = {},
             onAdd = {},
             onRemove = {},
+            onRemoveAlertRule = {},
+            onRegexChange = {},
+            onCategorySlugsChange = {},
+            onExcludedWordsChange = {},
         )
     }
 }

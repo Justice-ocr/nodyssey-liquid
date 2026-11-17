@@ -2,6 +2,8 @@ package io.github.nodyssey.ui.composer
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.size
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
@@ -18,6 +20,7 @@ import androidx.compose.ui.unit.dp
 import io.github.nodyssey.ui.resources.Res
 import io.github.nodyssey.ui.resources.composer_app_menu
 import io.github.nodyssey.ui.resources.composer_insert_stardust
+import io.github.nodyssey.ui.resources.composer_insert_valuation
 import io.github.nodyssey.ui.resources.composer_insert_vote
 import io.github.plaza.designsys.component.PlazaIcons
 import org.jetbrains.compose.resources.stringResource
@@ -33,6 +36,7 @@ fun ComposerAppMenu(
     onInsertVote: () -> Unit,
     onInsertStardust: () -> Unit,
     modifier: Modifier = Modifier,
+    onInsertValuation: () -> Unit = {},
 ) {
     var open by remember { mutableStateOf(false) }
 
@@ -51,6 +55,14 @@ fun ComposerAppMenu(
                 onClick = {
                     open = false
                     onInsertVote()
+                },
+            )
+            DropdownMenuItem(
+                text = { Text(stringResource(Res.string.composer_insert_valuation)) },
+                leadingIcon = { Icon(Icons.Default.ShoppingCart, contentDescription = null) },
+                onClick = {
+                    open = false
+                    onInsertValuation()
                 },
             )
             DropdownMenuItem(

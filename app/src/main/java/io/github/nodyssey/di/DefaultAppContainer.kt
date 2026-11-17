@@ -125,6 +125,7 @@ import io.github.nodyssey.data.sticker.GitHubStickerSource
 import io.github.nodyssey.data.sticker.StickerLibrary
 import io.github.nodyssey.data.update.AppUpdateRepository
 import io.github.nodyssey.data.update.DefaultAppUpdateRepository
+import io.github.nodyssey.data.valuation.ExchangeRateRepository
 import io.github.nodyssey.notifications.AndroidLotteryPlatform
 import io.github.nodyssey.notifications.lotteryDataStore
 import io.github.nodyssey.platform.AndroidAccountCookies
@@ -607,6 +608,7 @@ class DefaultAppContainer(
             keywords = titleKeywordStore,
             tracked = trackedThreadStore,
             settings = settingsRepository,
+            loadCategoryList = { slug, sort, page -> remotePosts.loadList(categorySlug = slug, page = page, sort = sort).posts },
         )
     }
 
@@ -655,6 +657,14 @@ class DefaultAppContainer(
             // long as that stays true. Flipping the switch off still sticks.
             devChannelDefault = isPreReleaseVersionName(appVersion.name),
             site = site,
+        )
+    }
+
+    override val exchangeRateRepository: ExchangeRateRepository by lazy {
+        ExchangeRateRepository(
+            http = OkHttpTransport(imageHostClient),
+            dataStore = appContext.settingsDataStore,
+            clock = clock,
         )
     }
 

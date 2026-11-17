@@ -22,6 +22,9 @@ import io.github.nodyssey.ui.tools.LuckyRoute
 import io.github.nodyssey.ui.tools.LuckyViewModel
 import io.github.nodyssey.ui.tools.RulingRoute
 import io.github.nodyssey.ui.tools.RulingViewModel
+import io.github.nodyssey.ui.tools.VpsValuationRoute
+import io.github.nodyssey.ui.tools.VpsValuationViewModel
+import io.github.nodyssey.ui.tools.vpsValuationViewModelFactory
 
 /**
  * 社区工具 and the boards behind it: 加精, 抽奖, 邀请, 仲裁, 测评对比, and 关于社区.
@@ -42,7 +45,15 @@ internal fun EntryProviderScope<NavKey>.toolsEntries(nav: StackEntryScope) = wit
             onReportCompare = { backStack.add(ReportCompareKey) },
             onAboutCommunity = { backStack.add(AboutCommunityKey) },
             onMail = { backStack.add(MailInboxKey) },
+            onVpsValuation = { backStack.add(VpsValuationKey) },
         )
+    }
+
+    entry<VpsValuationKey> {
+        if (container.exchangeRateRepository != null) {
+            val viewModel: VpsValuationViewModel = viewModel(factory = vpsValuationViewModelFactory(requireNotNull(container.exchangeRateRepository)))
+            VpsValuationRoute(viewModel = viewModel, onBack = { backStack.removeLastOrNull() })
+        }
     }
 
     entry<MailInboxKey> { key ->

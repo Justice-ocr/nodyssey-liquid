@@ -117,6 +117,7 @@ import io.github.nodyssey.core.NodeSeekSite
 import io.github.nodyssey.data.FreeChickenLegs
 import io.github.nodyssey.data.composer.PostEditTarget
 import io.github.nodyssey.data.settings.PostReplyStyle
+import io.github.nodyssey.data.valuation.ExchangeRateRepository
 import io.github.nodyssey.model.PostContent
 import io.github.nodyssey.model.PostReactions
 import io.github.nodyssey.model.ReactionAction
@@ -293,6 +294,7 @@ fun PostDetailRoute(
     /** 分享为图片's hand-off to the platform; null hides the row. See [PostDetailScreen]. */
     shareImage: (suspend (ImageBitmap, String?) -> Boolean)? = null,
     lotteryContent: @Composable (PostContent, String, Boolean) -> Unit = { _, _, _ -> },
+    exchangeRateRepository: ExchangeRateRepository? = null,
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
     LaunchedEffect(state.hasContent, state.totalPages, state.lastFloor, state.isLoading, state.isRefreshing) {
@@ -375,6 +377,8 @@ fun PostDetailRoute(
         onDismissVoteCreation = replyViewModel::dismissVoteCreation,
         payeeUid = replyViewModel::receiveCodePayeeUid,
         onInsertReceiveCode = replyViewModel::insertReceiveCode,
+        onInsertMarkdown = replyViewModel::insertMarkdown,
+        exchangeRateRepository = exchangeRateRepository,
     )
 }
 

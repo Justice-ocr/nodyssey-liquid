@@ -156,6 +156,14 @@ class SettingsRepository(
                 notifyMail = preferences[KEY_NOTIFY_MAIL] ?: false,
                 notifyKeywordAlerts = preferences[KEY_NOTIFY_KEYWORD_ALERTS] ?: true,
                 notifyTrackedThreads = preferences[KEY_NOTIFY_TRACKED_THREADS] ?: true,
+                alertCategorySlugs = decodeValues(preferences[KEY_ALERT_CATEGORY_SLUGS])
+                    .map(String::lowercase)
+                    .filter { it.matches(BOARD_SLUG_REGEX) }
+                    .distinct(),
+                alertExcludedWords = decodeValues(preferences[KEY_ALERT_EXCLUDED_WORDS])
+                    .map(String::trim)
+                    .filter(String::isNotEmpty)
+                    .distinct(),
                 readHistoryLimit = readHistoryLimit(preferences),
                 updateCheckOnLaunch = preferences[KEY_UPDATE_CHECK_ON_LAUNCH] ?: true,
                 updateDevChannel = preferences[KEY_UPDATE_DEV_CHANNEL] ?: devChannelDefault,
@@ -393,6 +401,14 @@ class SettingsRepository(
     suspend fun setNotifyKeywordAlerts(enabled: Boolean) = edit { it[KEY_NOTIFY_KEYWORD_ALERTS] = enabled }
 
     suspend fun setNotifyTrackedThreads(enabled: Boolean) = edit { it[KEY_NOTIFY_TRACKED_THREADS] = enabled }
+
+    suspend fun setAlertCategorySlugs(slugs: List<String>) = edit {
+        it[KEY_ALERT_CATEGORY_SLUGS] = encodeValues(slugs.map(String::lowercase).filter { slug -> slug.matches(BOARD_SLUG_REGEX) }, MAX_ALERT_FILTERS)
+    }
+
+    suspend fun setAlertExcludedWords(words: List<String>) = edit {
+        it[KEY_ALERT_EXCLUDED_WORDS] = encodeValues(words.map(String::trim).filter(String::isNotEmpty).map(String::lowercase), MAX_ALERT_FILTERS)
+    }
 
     /**
      * The newest thread id 提醒关键词 has already looked at, or null before its first run. Worker
@@ -802,6 +818,8 @@ class SettingsRepository(
         private val KEY_NOTIFY_MAIL = booleanPreferencesKey("notify_mail")
         private val KEY_NOTIFY_KEYWORD_ALERTS = booleanPreferencesKey("notify_keyword_alerts")
         private val KEY_NOTIFY_TRACKED_THREADS = booleanPreferencesKey("notify_tracked_threads")
+        private val KEY_ALERT_CATEGORY_SLUGS = stringPreferencesKey("alert_category_slugs")
+        private val KEY_ALERT_EXCLUDED_WORDS = stringPreferencesKey("alert_excluded_words")
         private val KEY_SEEN_REPLIES = intPreferencesKey("notification_seen_replies")
         private val KEY_SEEN_MENTIONS = intPreferencesKey("notification_seen_mentions")
         private val KEY_SEEN_MESSAGES = intPreferencesKey("notification_seen_messages")
@@ -838,6 +856,8 @@ class SettingsRepository(
 
         /** Comfortably above `EditorAction.entries.size`; a stored strip can never need more. */
         private const val MAX_TOOLBAR_ACTIONS = 32
+        private const val MAX_ALERT_FILTERS = 64
+        private val BOARD_SLUG_REGEX = Regex("[a-z0-9_-]{1,40}")
 
         /**
          * How many threads 浏览历史 keeps, which is also how many reading places are kept.
@@ -1084,6 +1104,10 @@ data class UserSettings(
     val notifyKeywordAlerts: Boolean = true,
     /** 追踪新回复: new replies on a thread the reader chose to follow. */
     val notifyTrackedThreads: Boolean = true,
+    /** Optional category slugs for Pulse Radar; empty means all boards. */
+    val alertCategorySlugs: List<String> = emptyList(),
+    /** Titles containing any excluded word are ignored by Pulse Radar. */
+    val alertExcludedWords: List<String> = emptyList(),
     /** 浏览历史保留条数; [SettingsRepository.READ_HISTORY_UNLIMITED] for 无上限. */
     val readHistoryLimit: Int = SettingsRepository.DEFAULT_READ_HISTORY_LIMIT,
     /**

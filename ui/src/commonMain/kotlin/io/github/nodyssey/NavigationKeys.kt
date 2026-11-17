@@ -335,6 +335,9 @@ data object StardustKey : NavKey
 data object CommunityToolsKey : NavKey
 
 @Serializable
+data object VpsValuationKey : NavKey
+
+@Serializable
 data object MailInboxKey : NavKey
 
 /** IDs only: neither credentials nor mail content belong in a saved back stack. */

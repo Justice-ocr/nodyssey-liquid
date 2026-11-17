@@ -45,6 +45,7 @@ import io.github.nodyssey.data.settings.ReportCompareStore
 import io.github.nodyssey.data.settings.SettingsRepository
 import io.github.nodyssey.data.sticker.StickerLibrary
 import io.github.nodyssey.data.update.AppUpdateRepository
+import io.github.nodyssey.data.valuation.ExchangeRateRepository
 import io.github.plaza.core.AppClock
 import io.github.plaza.core.AppDispatchers
 import io.github.plaza.core.AppVersion
@@ -86,6 +87,7 @@ interface AppContainer {
     val trackedThreadStore: TrackedThreadStore
     val categoryRepository: CategoryRepository
     val settingsRepository: SettingsRepository
+    val exchangeRateRepository: ExchangeRateRepository? get() = null
 
     /** 测评对比's basket — the reports set aside to compare. Lives in [settingsRepository]'s store. */
     val reportCompareStore: ReportCompareStore

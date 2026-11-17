@@ -463,6 +463,10 @@ class PostComposerViewModel(
         }
     }
 
+    fun insertMarkdown(markdown: String) {
+        bodyState.editFromViewModel { insertText(markdown) }
+    }
+
     /** Puts the creation state back to idle — the dialog closing without having created anything. */
     fun dismissVoteCreation() {
         _uiState.update { it.copy(voteCreation = VoteCreationState.Idle) }

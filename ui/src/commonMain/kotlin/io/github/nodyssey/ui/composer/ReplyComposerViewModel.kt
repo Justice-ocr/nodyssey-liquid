@@ -326,6 +326,10 @@ class ReplyComposerViewModel(
     }
 
     /** Writes the strip through on every edit in the wrench panel; see `ToolbarCustomizeSheet`. */
+    fun insertMarkdown(markdown: String) {
+        bodyState.editFromViewModel { insertText(markdown) }
+    }
+
     fun setToolbar(actions: List<EditorAction>) {
         val repository = settings ?: return
         viewModelScope.launch {

@@ -11,6 +11,7 @@ import io.github.nodyssey.model.PostSummary
 import io.github.nodyssey.model.TitleKeywordKind
 import io.github.plaza.core.AppClock
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.map
 
 /**
@@ -56,6 +57,30 @@ class TitleKeywordStore(
     private val clock: AppClock,
 ) {
     fun keywords(kind: TitleKeywordKind): Flow<List<String>> = dao.observe(kind).map { rows -> rows.map { it.keyword } }
+
+    val alertRules: Flow<List<TitleAlertRule>> = combine(
+        dao.observe(TitleKeywordKind.ALERT),
+        dao.observe(TitleKeywordKind.ALERT_REGEX),
+    ) { words, patterns ->
+        (words.map { TitleAlertRule(it.keyword, isRegex = false) } + patterns.map { TitleAlertRule(it.keyword, isRegex = true) })
+            .sortedBy { rule ->
+                (if (rule.isRegex) patterns else words).firstOrNull { it.keyword == rule.text }?.addedAtMillis ?: 0L
+            }
+    }
+
+    suspend fun currentAlertRules(): List<TitleAlertRule> =
+        dao.list(TitleKeywordKind.ALERT).map { TitleAlertRule(it.keyword, false) } +
+            dao.list(TitleKeywordKind.ALERT_REGEX).map { TitleAlertRule(it.keyword, true) }
+
+    suspend fun addAlertRule(text: String, isRegex: Boolean): Boolean {
+        val normalized = if (isRegex) normalizePattern(text) else normalizeKeyword(text)
+        if (normalized == null) return false
+        dao.insert(TitleKeywordEntity(if (isRegex) TitleKeywordKind.ALERT_REGEX else TitleKeywordKind.ALERT, normalized, clock.nowMillis()))
+        return true
+    }
+
+    suspend fun removeAlertRule(rule: TitleAlertRule) =
+        dao.delete(if (rule.isRegex) TitleKeywordKind.ALERT_REGEX else TitleKeywordKind.ALERT, rule.text)
 
     suspend fun current(kind: TitleKeywordKind): List<String> = dao.list(kind).map { it.keyword }
 
@@ -119,6 +144,11 @@ class TitleKeywordStore(
 
 /** One 标题屏蔽 rule: a word a title must contain, or a pattern it must match. */
 data class TitleBlockRule(
+    val text: String,
+    val isRegex: Boolean,
+)
+
+data class TitleAlertRule(
     val text: String,
     val isRegex: Boolean,
 )
