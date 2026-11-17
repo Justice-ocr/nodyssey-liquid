@@ -9,6 +9,7 @@ import androidx.compose.ui.test.click
 import androidx.compose.ui.test.junit4.v2.createComposeRule
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
+import androidx.compose.ui.test.performScrollTo
 import androidx.compose.ui.test.performTouchInput
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
@@ -33,6 +34,29 @@ import org.robolectric.annotation.GraphicsMode
 class ProfileScreenTest {
     @get:Rule
     val composeRule = createComposeRule()
+
+    @Test
+    fun `signed-in community grid exposes community tools`() {
+        var toolsOpened = false
+        composeRule.setContent {
+            PlazaTheme {
+                ProfileScreen(
+                    state = ProfileUiState(isSignedIn = true, displayName = "nodyssey_dev"),
+                    destinations = ProfileDestinations(tools = { toolsOpened = true }),
+                    onSignIn = {},
+                    onRetry = {},
+                    onOpenWebsite = {},
+                    onVerify = {},
+                    onAttendance = {},
+                    onAttendanceBoard = {},
+                )
+            }
+        }
+
+        composeRule.onNodeWithText("社区工具").performScrollTo().assertIsDisplayed().performClick()
+
+        assertTrue(toolsOpened)
+    }
 
     @Test
     fun `signed attendance shows gain and opens the board`() {

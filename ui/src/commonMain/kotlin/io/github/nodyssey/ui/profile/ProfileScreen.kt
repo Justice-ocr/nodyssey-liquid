@@ -767,9 +767,8 @@ private data class ProfileTile(
  * There is no 资产 group. 鸡腿流水 and 星辰流水 are the balances on the account card above, 星辰转账 is
  * the 转账 on 星辰流水, and 邀请码 — bought with chicken, but a way into the community — is in 社区.
  *
- * 社区 carries 友站, which the older boards did not draw. It was the sixth link on 社区工具, and that
- * page is not reached from here while signed in — dropping the tile would have quietly deleted the
- * destination rather than moved it.
+ * 社区 carries 友站 and 社区工具, which the older boards did not draw. The latter is the home for VPS valuation and
+ * the other community utilities; keeping the entry here makes them reachable while signed in too.
  */
 private fun profileSections(destinations: ProfileDestinations, hasUnreadLotteryResults: Boolean, hasUnreadMail: Boolean): List<ProfileSection> =
     listOf(
@@ -798,6 +797,7 @@ private fun profileSections(destinations: ProfileDestinations, hasUnreadLotteryR
                 ProfileTile(Res.string.profile_tile_block, PlazaIcons.Block, destinations.blockList),
                 ProfileTile(Res.string.profile_tile_invite, PlazaIcons.ConfirmationNumber, destinations.invite),
                 ProfileTile(Res.string.mail_title, Icons.Default.Email, destinations.mail, hasUnreadMail, Res.string.mail_unread),
+                ProfileTile(Res.string.profile_tools, PlazaIcons.DashboardCustomize, destinations.tools),
                 ProfileTile(Res.string.profile_tile_about_community, PlazaIcons.Forum, destinations.aboutCommunity),
             ),
         ),
