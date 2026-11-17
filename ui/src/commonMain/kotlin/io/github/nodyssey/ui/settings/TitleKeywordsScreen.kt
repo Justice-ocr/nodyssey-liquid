@@ -2,7 +2,6 @@ package io.github.nodyssey.ui.settings
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -13,7 +12,6 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Close
-import androidx.compose.material3.Checkbox
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -24,7 +22,6 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.text.input.ImeAction
@@ -46,15 +43,20 @@ import io.github.nodyssey.ui.resources.keywords_alert_title
 import io.github.nodyssey.ui.resources.keywords_block_footer
 import io.github.nodyssey.ui.resources.keywords_block_title
 import io.github.nodyssey.ui.resources.keywords_empty
+import io.github.nodyssey.ui.resources.keywords_regex_description
 import io.github.nodyssey.ui.resources.keywords_regex_invalid
 import io.github.nodyssey.ui.resources.keywords_regex_placeholder
 import io.github.nodyssey.ui.resources.keywords_regex_toggle
 import io.github.nodyssey.ui.resources.keywords_remove
 import io.github.nodyssey.ui.resources.keywords_rule_regex
+import io.github.nodyssey.ui.resources.keywords_section_rules
+import io.github.nodyssey.ui.resources.keywords_section_scope
 import io.github.plaza.designsys.component.GroupedListItem
+import io.github.plaza.designsys.component.GroupedRow
 import io.github.plaza.designsys.component.LayerPageGutter
 import io.github.plaza.designsys.component.OneHandTopAppBar
 import io.github.plaza.designsys.component.PlazaFieldDefaults
+import io.github.plaza.designsys.component.SectionLabel
 import io.github.plaza.designsys.component.rememberOneHandAppBarState
 import io.github.plaza.designsys.theme.PlazaTheme
 import io.github.plaza.designsys.theme.Spacing
@@ -144,10 +146,15 @@ fun TitleKeywordsScreen(
                 },
             )
             if (alerts) {
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    Checkbox(checked = state.isRegex, onCheckedChange = onRegexChange)
-                    Text(stringResource(Res.string.keywords_regex_toggle), style = MaterialTheme.typography.bodyMedium)
-                }
+                SectionLabel(stringResource(Res.string.keywords_section_scope))
+                GroupedRow(
+                    title = stringResource(Res.string.keywords_regex_toggle),
+                    subtitle = stringResource(Res.string.keywords_regex_description),
+                    first = true,
+                    last = true,
+                    checked = state.isRegex,
+                    onCheckedChange = onRegexChange,
+                )
                 OutlinedTextField(
                     value = state.categorySlugs,
                     onValueChange = onCategorySlugsChange,
@@ -169,6 +176,7 @@ fun TitleKeywordsScreen(
                     colors = PlazaFieldDefaults.colors(),
                 )
             }
+            SectionLabel(stringResource(Res.string.keywords_section_rules))
             val displayedRules = if (alerts) state.alertRules else state.keywords.map { TitleAlertRule(it, false) }
             if (displayedRules.isEmpty()) {
                 Text(

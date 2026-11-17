@@ -1001,6 +1001,7 @@
     <string name="tools_group_browse">Browse</string>
     <string name="tools_group_play">Play</string>
     <string name="tools_group_watch">Watch</string>
+    <string name="tools_group_vps">Valuation</string>
     <string name="tools_award">Recommended reading</string>
     <string name="tools_award_subtitle">The awarded posts · drawn like home</string>
     <string name="tools_providers">Partner shops</string>
@@ -1518,6 +1519,9 @@
     <string name="block_tab_users">Users</string>
     <string name="block_tab_titles">Titles</string>
     <string name="keywords_regex_toggle">Regular expression</string>
+    <string name="keywords_regex_description">Match patterns against post titles; off uses plain keywords</string>
+    <string name="keywords_section_scope">Monitoring scope</string>
+    <string name="keywords_section_rules">Match rules</string>
     <string name="keywords_regex_placeholder">A pattern to match in titles</string>
     <string name="keywords_regex_invalid">This is not a valid regular expression</string>
     <string name="keywords_rule_regex">Regular expression</string>

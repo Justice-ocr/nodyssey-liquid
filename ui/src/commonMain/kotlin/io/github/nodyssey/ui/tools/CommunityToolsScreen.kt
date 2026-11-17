@@ -32,6 +32,7 @@ import io.github.nodyssey.ui.resources.tools_friends
 import io.github.nodyssey.ui.resources.tools_friends_subtitle
 import io.github.nodyssey.ui.resources.tools_group_browse
 import io.github.nodyssey.ui.resources.tools_group_play
+import io.github.nodyssey.ui.resources.tools_group_vps
 import io.github.nodyssey.ui.resources.tools_group_watch
 import io.github.nodyssey.ui.resources.tools_invite
 import io.github.nodyssey.ui.resources.tools_invite_subtitle
@@ -174,14 +175,17 @@ fun CommunityToolsScreen(
                 }
             }
 
-            GroupedRow(
-                title = stringResource(Res.string.vps_title),
-                subtitle = stringResource(Res.string.vps_tools_subtitle),
-                icon = Icons.Default.ShoppingCart,
-                first = true,
-                last = true,
-                onClick = onVpsValuation,
-            )
+            Column {
+                SectionLabel(stringResource(Res.string.tools_group_vps))
+                GroupedRow(
+                    title = stringResource(Res.string.vps_title),
+                    subtitle = stringResource(Res.string.vps_tools_subtitle),
+                    icon = Icons.Default.ShoppingCart,
+                    first = true,
+                    last = true,
+                    onClick = onVpsValuation,
+                )
+            }
 
             GroupedRow(
                 title = stringResource(Res.string.mail_title),

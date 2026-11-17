@@ -995,6 +995,7 @@
     <string name="tools_group_browse">逛</string>
     <string name="tools_group_play">玩</string>
     <string name="tools_group_watch">看</string>
+    <string name="tools_group_vps">估值工具</string>
     <string name="tools_award">推薦閱讀</string>
     <string name="tools_award_subtitle">加精文列表 · 與首頁同款</string>
     <string name="tools_providers">合作商家</string>
@@ -1510,6 +1511,9 @@
     <string name="block_tab_users">使用者</string>
     <string name="block_tab_titles">標題</string>
     <string name="keywords_regex_toggle">正規表示式</string>
+    <string name="keywords_regex_description">按標題內容匹配；關閉時按一般關鍵字匹配</string>
+    <string name="keywords_section_scope">監控範圍</string>
+    <string name="keywords_section_rules">匹配規則</string>
     <string name="keywords_regex_placeholder">輸入正規表示式，標題裡能匹配到就算</string>
     <string name="keywords_regex_invalid">這條正規表示式寫得不對</string>
     <string name="keywords_rule_regex">正規表示式</string>
