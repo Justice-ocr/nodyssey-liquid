@@ -1795,7 +1795,7 @@
     <string name="keywords_regex_invalid">这条正则表达式写得不对</string>
     <string name="keywords_rule_regex">正则表达式</string>
     <string name="keywords_alert_categories">监控版块</string>
-    <string name="keywords_alert_categories_hint">留空表示全部；输入版块 slug，以逗号分隔，如 tech, trade</string>
+    <string name="keywords_alert_category_unavailable">%1$s（不在当前版块列表）</string>
     <string name="keywords_alert_exclusions">排除词</string>
     <string name="keywords_alert_exclusions_hint">标题包含这些词时不提醒，以逗号分隔</string>
     <string name="block_titles_footer">标题含这些词、或能被这些正则表达式匹配到的帖子，不出现在首页、版块和搜索里；匹配不区分大小写。只存在这台手机上，不随账号走；「临时显示被屏蔽内容」打开时也会一并显示。</string>

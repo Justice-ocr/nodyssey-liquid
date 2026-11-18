@@ -1526,7 +1526,7 @@
     <string name="keywords_regex_invalid">This is not a valid regular expression</string>
     <string name="keywords_rule_regex">Regular expression</string>
     <string name="keywords_alert_categories">Boards to monitor</string>
-    <string name="keywords_alert_categories_hint">Blank means all boards; comma-separated slugs, e.g. tech, trade</string>
+    <string name="keywords_alert_category_unavailable">%1$s (not in the current board list)</string>
     <string name="keywords_alert_exclusions">Exclude words</string>
     <string name="keywords_alert_exclusions_hint">Skip titles containing these words, comma-separated</string>
     <string name="block_titles_footer">Threads whose titles contain one of these words, or match one of these patterns, are hidden from the home feed, boards and search. Matching ignores case. Kept on this device only, not on your account. Show blocked content reveals them too.</string>

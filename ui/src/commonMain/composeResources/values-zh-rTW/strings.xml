@@ -1518,7 +1518,7 @@
     <string name="keywords_regex_invalid">這條正規表示式寫得不對</string>
     <string name="keywords_rule_regex">正規表示式</string>
     <string name="keywords_alert_categories">監控版塊</string>
-    <string name="keywords_alert_categories_hint">留空代表全部；輸入版塊 slug，以逗號分隔，例如 tech, trade</string>
+    <string name="keywords_alert_category_unavailable">%1$s（不在目前版塊清單）</string>
     <string name="keywords_alert_exclusions">排除詞</string>
     <string name="keywords_alert_exclusions_hint">標題包含這些詞時不提醒，以逗號分隔</string>
     <string name="block_titles_footer">標題含這些詞、或能被這些正規表示式匹配到的帖子，不出現在首頁、版塊和搜尋裡；匹配不分大小寫。只存在這台手機上，不隨帳號走；「暫時顯示被封鎖內容」打開時也會一併顯示。</string>

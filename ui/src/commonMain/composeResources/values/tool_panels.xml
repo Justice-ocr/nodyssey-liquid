@@ -1,0 +1,8 @@
+<resources>
+    <string name="radar_title">标题雷达</string>
+    <string name="radar_add_rule">新增规则</string>
+    <string name="radar_plain">关键词</string>
+    <string name="radar_count">%1$d 条规则</string>
+    <string name="vps_contract">续费信息</string>
+    <string name="vps_transaction">转让与费用</string>
+</resources>

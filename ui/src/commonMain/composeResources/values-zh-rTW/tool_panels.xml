@@ -1,0 +1,8 @@
+<resources>
+    <string name="radar_title">標題雷達</string>
+    <string name="radar_add_rule">新增規則</string>
+    <string name="radar_plain">關鍵字</string>
+    <string name="radar_count">%1$d 條規則</string>
+    <string name="vps_contract">續費資訊</string>
+    <string name="vps_transaction">轉讓與費用</string>
+</resources>

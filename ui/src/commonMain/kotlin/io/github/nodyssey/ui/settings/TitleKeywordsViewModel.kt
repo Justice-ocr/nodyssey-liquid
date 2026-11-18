@@ -5,6 +5,8 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
+import io.github.nodyssey.data.Board
+import io.github.nodyssey.data.CategoryRepository
 import io.github.nodyssey.data.TitleAlertRule
 import io.github.nodyssey.data.TitleKeywordStore
 import io.github.nodyssey.data.settings.SettingsRepository
@@ -17,6 +19,7 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -25,13 +28,14 @@ class TitleKeywordsViewModel(
     private val kind: TitleKeywordKind,
     private val store: TitleKeywordStore,
     private val settingsRepository: SettingsRepository,
+    categoryRepository: CategoryRepository,
 ) : ViewModel() {
     private val form = MutableStateFlow(TitleKeywordForm())
-    private var categorySaveJob: Job? = null
+    private val boards = if (kind == TitleKeywordKind.ALERT) categoryRepository.boards else flowOf(emptyList())
     private var excludedSaveJob: Job? = null
 
     val uiState: StateFlow<TitleKeywordsUiState> =
-        combine(store.alertRules, store.keywords(kind), form, settingsRepository.settings) { rules, keywords, typed, settings ->
+        combine(store.alertRules, store.keywords(kind), form, settingsRepository.settings, boards) { rules, keywords, typed, settings, catalog ->
             TitleKeywordsUiState(
                 kind = kind,
                 keywords = keywords,
@@ -39,7 +43,8 @@ class TitleKeywordsViewModel(
                 input = typed.input,
                 isRegex = typed.isRegex,
                 invalidPattern = typed.isRegex && typed.input.isNotBlank() && TitleKeywordStore.normalizePattern(typed.input) == null,
-                categorySlugs = typed.categorySlugs ?: settings.alertCategorySlugs.joinToString(", "),
+                boards = catalog.filter { it.slug != null && !it.adminOnly },
+                categorySlugs = settings.alertCategorySlugs,
                 excludedWords = typed.excludedWords ?: settings.alertExcludedWords.joinToString(", "),
             )
         }.stateIn(
@@ -47,6 +52,12 @@ class TitleKeywordsViewModel(
             started = SharingStarted.WhileSubscribed(5_000),
             initialValue = TitleKeywordsUiState(kind = kind),
         )
+
+    init {
+        if (kind == TitleKeywordKind.ALERT) {
+            viewModelScope.launch { categoryRepository.refreshIfNeeded() }
+        }
+    }
 
     fun onInputChange(value: String) = form.update {
         it.copy(input = value.take(if (it.isRegex) TitleKeywordStore.MAX_PATTERN_LENGTH else TitleKeywordStore.MAX_KEYWORD_LENGTH))
@@ -80,15 +91,8 @@ class TitleKeywordsViewModel(
         viewModelScope.launch { store.removeAlertRule(rule) }
     }
 
-    fun setCategorySlugs(value: String) {
-        form.update { it.copy(categorySlugs = value) }
-        categorySaveJob?.cancel()
-        categorySaveJob = viewModelScope.launch {
-            delay(FILTER_SAVE_DELAY_MILLIS)
-            settingsRepository.setAlertCategorySlugs(value.split(','))
-            val saved = settingsRepository.settings.first().alertCategorySlugs.joinToString(", ")
-            form.update { it.copy(categorySlugs = saved) }
-        }
+    fun setCategorySlugs(slugs: List<String>) {
+        viewModelScope.launch { settingsRepository.setAlertCategorySlugs(slugs) }
     }
 
     fun setExcludedWords(value: String) {
@@ -110,7 +114,9 @@ class TitleKeywordsViewModel(
             kind: TitleKeywordKind,
         ): ViewModelProvider.Factory =
             viewModelFactory {
-                initializer { TitleKeywordsViewModel(kind, container.titleKeywordStore, container.settingsRepository) }
+                initializer {
+                    TitleKeywordsViewModel(kind, container.titleKeywordStore, container.settingsRepository, container.categoryRepository)
+                }
             }
     }
 }
@@ -118,7 +124,6 @@ class TitleKeywordsViewModel(
 private data class TitleKeywordForm(
     val input: String = "",
     val isRegex: Boolean = false,
-    val categorySlugs: String? = null,
     val excludedWords: String? = null,
 )
 
@@ -129,6 +134,7 @@ data class TitleKeywordsUiState(
     val input: String = "",
     val isRegex: Boolean = false,
     val invalidPattern: Boolean = false,
-    val categorySlugs: String = "",
+    val boards: List<Board> = emptyList(),
+    val categorySlugs: List<String> = emptyList(),
     val excludedWords: String = "",
 )

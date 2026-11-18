@@ -1,0 +1,8 @@
+<resources>
+    <string name="radar_title">Title radar</string>
+    <string name="radar_add_rule">New rule</string>
+    <string name="radar_plain">Keyword</string>
+    <string name="radar_count">Rules: %1$d</string>
+    <string name="vps_contract">Renewal details</string>
+    <string name="vps_transaction">Resale and fees</string>
+</resources>
