@@ -2,6 +2,14 @@
   "schema": 1,
   "versions": [
     {
+      "versionName": "1.3.11.5",
+      "tag": "v1.3.11.5",
+      "notes": "标题雷达重新布局，监控版块支持按名称多选，原有选择会自动保留。VPS 剩余价值计算器将估值和剩余天数放到页首，续费、费用和汇率分组显示。",
+      "publishedOn": "2026-11-18",
+      "preRelease": false,
+      "releaseUrl": "https://github.com/Justice-ocr/nodyssey-liquid/releases/tag/v1.3.11.5"
+    },
+    {
       "versionName": "1.3.11.4",
       "tag": "v1.3.11.4",
       "notes": "Fixes the missing Community Tools tile for signed-in users. It opens the utilities page, including VPS valuation. Same Liquid identity; code 169. Profile regression tests and signed release checks pass.",

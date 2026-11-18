@@ -1,15 +1,15 @@
 {
   "schema": 1,
   "channel": "stable",
-  "versionName": "1.3.11.4",
-  "tag": "v1.3.11.4",
-  "notes": "Fixes the missing Community Tools entry on the signed-in My page. It now opens the utilities page, including standalone VPS valuation. Keeps Liquid package/signature; ProfileScreen tests, compile, lint, formatting, and signed release checks pass. No device validation.",
-  "publishedOn": "2026-11-17",
+  "versionName": "1.3.11.5",
+  "tag": "v1.3.11.5",
+  "notes": "标题雷达重新布局，监控版块支持按名称多选，原有选择会自动保留。VPS 剩余价值计算器将估值和剩余天数放到页首，续费、费用和汇率分组显示。",
+  "publishedOn": "2026-11-18",
   "apk": {
-    "name": "nodyssey-v1.3.11.4.apk",
-    "url": "https://github.com/Justice-ocr/nodyssey-liquid/releases/download/v1.3.11.4/nodyssey-v1.3.11.4.apk",
-    "sizeBytes": 12255458,
-    "sha256": "ee78ae23964f21ffbe841dedf32af7ef294f35fe520d29612f408eab28995238"
+    "name": "nodyssey-v1.3.11.5.apk",
+    "url": "https://github.com/Justice-ocr/nodyssey-liquid/releases/download/v1.3.11.5/nodyssey-v1.3.11.5.apk",
+    "sizeBytes": 12273037,
+    "sha256": "0096cc1c1d0ff02f3581be29e1dd3abcb72e9c9f5a6f6917da43eea4e9c71820"
   },
-  "releaseUrl": "https://github.com/Justice-ocr/nodyssey-liquid/releases/tag/v1.3.11.4"
+  "releaseUrl": "https://github.com/Justice-ocr/nodyssey-liquid/releases/tag/v1.3.11.5"
 }
